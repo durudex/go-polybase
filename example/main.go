@@ -13,7 +13,9 @@ type City struct {
 }
 
 func main() {
-	coll := polybase.New().Collection("V-space/City")
+	coll := polybase.New(polybase.Config{
+		URL: polybase.TestnetURL,
+	}).Collection("V-space/City")
 
 	var single polybase.SingleResponse[City]
 

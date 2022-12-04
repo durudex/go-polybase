@@ -1,9 +1,14 @@
 package polybase
 
-const URL string = "https://testnet.polybase.xyz/v0"
+const TestnetURL string = "https://testnet.polybase.xyz/v0"
 
 type Polybase interface {
 	Collection(name string) Collection
+}
+
+type Config struct {
+	URL              string
+	DefaultNamespace string
 }
 
 type Record[T any] struct {
@@ -20,10 +25,19 @@ type Cursor struct {
 	Before string `json:"before"`
 }
 
-func New() Polybase { return &polybase{client: NewClient()} }
+func New(cfg Config) Polybase {
+	return &polybase{client: NewClient(cfg.URL), cfg: cfg}
+}
 
-type polybase struct{ client Client }
+type polybase struct {
+	client Client
+	cfg    Config
+}
 
 func (p *polybase) Collection(name string) Collection {
+	if p.cfg.DefaultNamespace != "" {
+		name = p.cfg.DefaultNamespace + "/" + name
+	}
+
 	return NewCollection(name, p.client)
 }
