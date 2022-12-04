@@ -15,10 +15,17 @@ type City struct {
 func main() {
 	coll := polybase.New().Collection("V-space/City")
 
-	var result polybase.SingleResponse[City]
+	var single polybase.SingleResponse[City]
 
-	coll.Record("Vizag").Get(context.Background(), &result)
+	coll.Record("Vizag").Get(context.Background(), &single)
 
-	fmt.Println(result.Block.Hash)
-	fmt.Println(result.Data.Name)
+	fmt.Println(single.Block.Hash)
+	fmt.Println(single.Data.Name)
+
+	var result polybase.Response[City]
+
+	coll.Get(context.Background(), &result)
+
+	fmt.Println(result.Cursor.After)
+	fmt.Println(result.Data[0].Data.Name)
 }
