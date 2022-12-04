@@ -7,10 +7,15 @@
 
 package polybase
 
-import "context"
+import (
+	"context"
+	"fmt"
+	"net/url"
+)
 
 type Option interface {
 	Get(ctx context.Context, v any) error
+	Call(ctx context.Context, method string, v []any) error
 }
 
 type option struct {
@@ -26,6 +31,16 @@ func (o option) Get(ctx context.Context, v any) error {
 	req := &Request{
 		Endpoint: o.endpoint,
 		Method:   "GET",
+	}
+
+	return o.client.MakeRequest(ctx, req, v)
+}
+
+func (o option) Call(ctx context.Context, method string, v []any) error {
+	req := &Request{
+		Endpoint: o.endpoint + fmt.Sprintf("/call/%s", url.QueryEscape(method)),
+		Method:   "POST",
+		Body:     Body{Args: v},
 	}
 
 	return o.client.MakeRequest(ctx, req, v)

@@ -22,6 +22,8 @@ func main() {
 	getList(coll)
 
 	create(coll)
+
+	call(coll)
 }
 
 func getSingle(coll polybase.Collection) {
@@ -49,4 +51,8 @@ func getList(coll polybase.Collection) {
 
 func create(coll polybase.Collection) {
 	coll.Create(context.Background(), []any{"Hello Durudex", "Hello Durudex"})
+}
+
+func call(coll polybase.Collection) {
+	coll.Record("Hello Durudex").Call(context.Background(), "setCountry", []any{"it works"})
 }
