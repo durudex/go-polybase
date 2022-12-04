@@ -14,14 +14,19 @@ type Option interface {
 }
 
 type option struct {
-	client Client
-	req    *Request
+	client   Client
+	endpoint string
 }
 
-func NewOption(client Client, req *Request) Option {
-	return option{client: client, req: req}
+func NewOption(client Client, endpoint string) Option {
+	return option{client: client, endpoint: endpoint}
 }
 
 func (o option) Get(ctx context.Context, v any) error {
-	return o.client.MakeRequest(ctx, o.req, v)
+	req := &Request{
+		Endpoint: o.endpoint,
+		Method:   "GET",
+	}
+
+	return o.client.MakeRequest(ctx, req, v)
 }

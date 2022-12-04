@@ -8,8 +8,10 @@
 package polybase
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
+	"io"
 	"net/http"
 )
 
@@ -20,6 +22,11 @@ type Client interface {
 type Request struct {
 	Endpoint string
 	Method   string
+	Body     Body
+}
+
+type Body struct {
+	Args []any `json:"args"`
 }
 
 type Response[T any] struct {
@@ -45,7 +52,18 @@ func NewClient(url string) Client {
 }
 
 func (c *client) MakeRequest(ctx context.Context, req *Request, resp any) error {
-	rc, err := http.NewRequestWithContext(ctx, req.Method, c.url+req.Endpoint, nil)
+	var body io.Reader
+
+	if req.Body.Args != nil {
+		b, err := json.Marshal(req.Body)
+		if err != nil {
+			return err
+		}
+
+		body = bytes.NewReader(b)
+	}
+
+	rc, err := http.NewRequestWithContext(ctx, req.Method, c.url+req.Endpoint, body)
 	if err != nil {
 		return err
 	}
