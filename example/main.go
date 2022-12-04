@@ -17,17 +17,30 @@ func main() {
 		URL: polybase.TestnetURL,
 	}).Collection("V-space/City")
 
+	getSingle(coll)
+
+	getList(coll)
+}
+
+func getSingle(coll polybase.Collection) {
 	var single polybase.SingleResponse[City]
 
 	coll.Record("Vizag").Get(context.Background(), &single)
 
-	fmt.Println(single.Block.Hash)
-	fmt.Println(single.Data.Name)
+	fmt.Println("Single, Block Hash:", single.Block.Hash)
+	fmt.Println("Single, Data:", single.Data.ID, single.Data.Name)
+}
 
+func getList(coll polybase.Collection) {
 	var result polybase.Response[City]
 
 	coll.Get(context.Background(), &result)
 
-	fmt.Println(result.Cursor.After)
-	fmt.Println(result.Data[0].Data.Name)
+	for _, city := range result.Data {
+		fmt.Println("List, Block Hash:", city.Block.Hash)
+		fmt.Println("List, Data:", city.Data.ID, city.Data.Name)
+	}
+
+	fmt.Println("List, After Cursor:", result.Cursor.After)
+	fmt.Println("List, Before Cursor:", result.Cursor.Before)
 }
