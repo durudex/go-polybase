@@ -20,12 +20,14 @@ func main() {
 	getSingle(coll)
 
 	getList(coll)
+
+	create(coll)
 }
 
 func getSingle(coll polybase.Collection) {
 	var single polybase.SingleResponse[City]
 
-	coll.Record("Vizag").Get(context.Background(), &single)
+	coll.Record("Hello Durudex").Get(context.Background(), &single)
 
 	fmt.Println("Single, Block Hash:", single.Block.Hash)
 	fmt.Println("Single, Data:", single.Data.ID, single.Data.Name)
@@ -43,4 +45,8 @@ func getList(coll polybase.Collection) {
 
 	fmt.Println("List, After Cursor:", result.Cursor.After)
 	fmt.Println("List, Before Cursor:", result.Cursor.Before)
+}
+
+func create(coll polybase.Collection) {
+	coll.Create(context.Background(), []any{"Hello Durudex", "Hello Durudex"})
 }

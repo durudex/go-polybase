@@ -15,7 +15,8 @@ import (
 
 type Collection interface {
 	Record(id string) Option
-	Get(ctx context.Context, resp any) error
+	Get(ctx context.Context, v any) error
+	Create(ctx context.Context, v []any) error
 }
 
 type collection struct {
@@ -28,19 +29,24 @@ func NewCollection(name string, client Client) Collection {
 }
 
 func (c *collection) Record(id string) Option {
-	req := &Request{
-		Endpoint: fmt.Sprintf("/collections/%s/records/%s", c.name, url.QueryEscape(id)),
-		Method:   "GET",
-	}
-
-	return NewOption(c.client, req)
+	return NewOption(c.client, fmt.Sprintf("/collections/%s/records/%s", c.name, url.QueryEscape(id)))
 }
 
-func (c *collection) Get(ctx context.Context, resp any) error {
+func (c *collection) Get(ctx context.Context, v any) error {
 	req := &Request{
 		Endpoint: fmt.Sprintf("/collections/%s/records", c.name),
 		Method:   "GET",
 	}
 
-	return c.client.MakeRequest(ctx, req, resp)
+	return c.client.MakeRequest(ctx, req, v)
+}
+
+func (c *collection) Create(ctx context.Context, v []any) error {
+	req := &Request{
+		Endpoint: fmt.Sprintf("/collections/%s/records", c.name),
+		Method:   "POST",
+		Body:     Body{Args: v},
+	}
+
+	return c.client.MakeRequest(ctx, req, v)
 }
