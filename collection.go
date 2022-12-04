@@ -21,11 +21,9 @@ func NewCollection(name string, client Client) Collection {
 }
 
 func (c *collection) Record(id string) Option {
-	uri := URL + fmt.Sprintf("/collections/%s/records/%s", c.name, url.QueryEscape(id))
-
 	req := &Request{
-		URL:    uri,
-		Method: "GET",
+		Endpoint: fmt.Sprintf("/collections/%s/records/%s", c.name, url.QueryEscape(id)),
+		Method:   "GET",
 	}
 
 	return NewOption(c.client, req)
@@ -33,8 +31,8 @@ func (c *collection) Record(id string) Option {
 
 func (c *collection) Get(ctx context.Context, resp any) error {
 	req := &Request{
-		URL:    URL + fmt.Sprintf("/collections/%s/records", c.name),
-		Method: "GET",
+		Endpoint: fmt.Sprintf("/collections/%s/records", c.name),
+		Method:   "GET",
 	}
 
 	return c.client.MakeRequest(ctx, req, resp)

@@ -11,8 +11,8 @@ type Client interface {
 }
 
 type Request struct {
-	URL    string
-	Method string
+	Endpoint string
+	Method   string
 }
 
 type Response[T any] struct {
@@ -27,15 +27,18 @@ type SingleResponse[T any] struct {
 	Error Error `json:"error,omitempty"`
 }
 
-type client struct{ doer *http.Client }
+type client struct {
+	url  string
+	doer *http.Client
+}
 
-func NewClient() Client {
+func NewClient(url string) Client {
 	// TODO: add custom client
-	return &client{doer: http.DefaultClient}
+	return &client{url: url, doer: http.DefaultClient}
 }
 
 func (c *client) MakeRequest(ctx context.Context, req *Request, resp any) error {
-	rc, err := http.NewRequestWithContext(ctx, req.Method, req.URL, nil)
+	rc, err := http.NewRequestWithContext(ctx, req.Method, c.url+req.Endpoint, nil)
 	if err != nil {
 		return err
 	}
