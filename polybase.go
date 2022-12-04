@@ -7,40 +7,61 @@
 
 package polybase
 
+// TestnetURL constant stores the URL of the latest version of the Polybase testnet.
 const TestnetURL string = "https://testnet.polybase.xyz/v0"
 
+// Polybase interface stores methods for interacting with the Polybase database.
 type Polybase interface {
+	// Collection method returns an implementation for interacting with specified Polybase
+	// collection. It takes one argument, which is the name of the collection, it can be a
+	// full name with namespace, but if you don't use the DefaultNamespace value in the
+	// configuration.
 	Collection(name string) Collection
 }
 
+// Config structure stores the configuration for interacting with Polybase database.
 type Config struct {
-	URL              string
+	// URL field stores the URL address to which the Polybase client will be connected.
+	URL string
+
+	// DefaultNamespace field stores the namespace used in the Polybase.Collection method as
+	// a name prefix.
 	DefaultNamespace string
 }
 
+// Record structure stores the record that is returned in the Polybase response.
 type Record[T any] struct {
+	// Block field stores block data from the blockchain.
 	Block Block `json:"block"`
-	Data  T     `json:"data"`
+
+	// Data field stores data with the specified type.
+	Data T `json:"data"`
 }
 
+// Block structure stores data about a block from the blockchain.
 type Block struct {
+	// The hash field stores the hash of a block from the blockchain.
 	Hash string `json:"hash"`
 }
 
+// Cursor structure stores data used for pagination.
 type Cursor struct {
-	After  string `json:"after"`
 	Before string `json:"before"`
+	After  string `json:"after"`
 }
 
+// New function returns a new Polybase client.
 func New(cfg Config) Polybase {
 	return &polybase{client: NewClient(cfg.URL), cfg: cfg}
 }
 
+// polybase structure implements all methods of the Polybase interface.
 type polybase struct {
 	client Client
 	cfg    Config
 }
 
+// Collection method returns an implementation for interacting with specified Polybase collection.
 func (p *polybase) Collection(name string) Collection {
 	if p.cfg.DefaultNamespace != "" {
 		name = p.cfg.DefaultNamespace + "/" + name
