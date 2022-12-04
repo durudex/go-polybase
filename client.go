@@ -7,12 +7,18 @@ import (
 )
 
 type Client interface {
-	Record(context.Context, *Request, any) error
+	MakeRequest(ctx context.Context, req *Request, resp any) error
 }
 
 type Request struct {
 	URL    string
 	Method string
+}
+
+type Response[T any] struct {
+	Data   []Record[T] `json:"data,omitempty"`
+	Cursor Cursor      `json:"cursor,omitempty"`
+	Error  Error       `json:"error,omitempty"`
 }
 
 type SingleResponse[T any] struct {
@@ -28,7 +34,7 @@ func NewClient() Client {
 	return &client{doer: http.DefaultClient}
 }
 
-func (c *client) Record(ctx context.Context, req *Request, resp any) error {
+func (c *client) MakeRequest(ctx context.Context, req *Request, resp any) error {
 	rc, err := http.NewRequestWithContext(ctx, req.Method, req.URL, nil)
 	if err != nil {
 		return err

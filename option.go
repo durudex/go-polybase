@@ -16,5 +16,5 @@ func NewOption(client Client, req *Request) Option {
 }
 
 func (o option) Get(ctx context.Context, v any) error {
-	return o.client.Record(ctx, o.req, v)
+	return o.client.MakeRequest(ctx, o.req, v)
 }
