@@ -15,7 +15,7 @@ import (
 
 type Collection interface {
 	Record(id string) Option
-	Get(ctx context.Context, v any) error
+	Get(ctx context.Context, v any, params ...string) error
 	Create(ctx context.Context, v []any) error
 }
 
@@ -32,9 +32,9 @@ func (c *collection) Record(id string) Option {
 	return NewOption(c.client, fmt.Sprintf("/collections/%s/records/%s", c.name, url.QueryEscape(id)))
 }
 
-func (c *collection) Get(ctx context.Context, v any) error {
+func (c *collection) Get(ctx context.Context, v any, params ...string) error {
 	req := &Request{
-		Endpoint: fmt.Sprintf("/collections/%s/records", c.name),
+		Endpoint: fmt.Sprintf("/collections/%s/records", c.name) + buildParam(params),
 		Method:   "GET",
 	}
 
