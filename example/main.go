@@ -38,7 +38,9 @@ func getSingle(coll polybase.Collection) {
 func getList(coll polybase.Collection) {
 	var result polybase.Response[City]
 
-	coll.Get(context.Background(), &result)
+	query := polybase.NewQuery().Limit(3)
+
+	coll.Get(context.Background(), &result, query.Params()...)
 
 	for _, city := range result.Data {
 		fmt.Println("List, Block Hash:", city.Block.Hash)

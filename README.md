@@ -10,6 +10,7 @@ go get github.com/v1def/go-polybase
 - [ ] Full support for Polybase capabilities.
 - [ ] Schema API Generation.
 - [ ] Polybase CLI.
+- [ ] Polylang parser.
 
 ## ⚠️ License
 
