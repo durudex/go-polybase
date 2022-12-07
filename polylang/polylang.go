@@ -12,7 +12,7 @@ import "github.com/alecthomas/participle/v2/lexer"
 type Polylang struct {
 	Pos lexer.Position
 
-	Collections *Collection
+	Collection *Collection
 }
 
 type Collection struct {

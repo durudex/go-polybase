@@ -1,4 +1,0 @@
-collection Test {
-    id: string;
-    name?: string;
-}
