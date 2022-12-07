@@ -15,6 +15,7 @@ import (
 type Query interface {
 	Before(string) Query
 	After(string) Query
+	Limit(int) Query
 	Params() []string
 }
 
@@ -30,6 +31,12 @@ func (q query) Before(s string) Query {
 
 func (q query) After(s string) Query {
 	q.params = append(q.params, fmt.Sprintf("after=%s", url.QueryEscape(s)))
+
+	return q
+}
+
+func (q query) Limit(n int) Query {
+	q.params = append(q.params, fmt.Sprintf("limit=%d", n))
 
 	return q
 }
