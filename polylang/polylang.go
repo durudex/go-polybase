@@ -25,13 +25,23 @@ type Collection struct {
 type Item struct {
 	Pos lexer.Position
 
-	Field *Field `parser:"@@ ';'"`
+	Field    *Field    `parser:"@@ ';'"`
+	Function *Function `parser:"@@"`
 }
 
 type Field struct {
 	Pos lexer.Position
 
 	Name     string `parser:"@Ident"`
-	Required bool   `parser:"@'?'?"`
+	Optional bool   `parser:"@'?'?"`
 	Type     string `parser:"':' @Ident"`
+}
+
+type Function struct {
+	Pos lexer.Position
+
+	Name           string   `parser:"@Ident '('"`
+	Parameters     []*Field `parser:"( @@ ( ',' @@ )* )? ')'"`
+	ReturnType     string   `parser:"( ':' @Ident )?"`
+	StatementsCode string   `parser:"'{' ( @Ident )? '}'"`
 }
