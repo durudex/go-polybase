@@ -1,0 +1,10 @@
+collection Full {
+    id: string;
+    name?: string;
+
+    @index(id, [name, desc]);
+
+    constructor (id: string, name?: string) {}
+
+    update(name: string) {}
+}

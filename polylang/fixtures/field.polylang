@@ -1,3 +1,1 @@
-collection Polybase {
-    polybase?: string;
-}
+polybase?: string;
