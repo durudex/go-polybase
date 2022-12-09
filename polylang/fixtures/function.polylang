@@ -1,0 +1,5 @@
+collection Polybase {
+    id: string;
+
+    constructor (id: string, name?: string) {}
+}
