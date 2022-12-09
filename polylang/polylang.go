@@ -25,8 +25,9 @@ type Collection struct {
 type Item struct {
 	Pos lexer.Position
 
-	Field    *Field    `parser:"@@ ';'"`
-	Function *Function `parser:"@@"`
+	Field    *Field    `parser:"@@"`
+	Function *Function `parser:"| @@"`
+	Index    *Index    `parser:"| @@"`
 }
 
 type Field struct {
@@ -34,14 +35,36 @@ type Field struct {
 
 	Name     string `parser:"@Ident"`
 	Optional bool   `parser:"@'?'?"`
-	Type     string `parser:"':' @Ident"`
+	Type     string `parser:"':' @Ident ';'"`
 }
 
 type Function struct {
 	Pos lexer.Position
 
-	Name           string   `parser:"@Ident '('"`
-	Parameters     []*Field `parser:"( @@ ( ',' @@ )* )? ')'"`
-	ReturnType     string   `parser:"( ':' @Ident )?"`
-	StatementsCode string   `parser:"'{' ( @Ident )? '}'"`
+	Name           string       `parser:"@Ident '('"`
+	Parameters     []*Parameter `parser:"( @@ ( ',' @@ )* )? ')'"`
+	ReturnType     string       `parser:"( ':' @Ident )?"`
+	StatementsCode string       `parser:"'{' ( @Ident )? '}'"`
+}
+
+type Parameter struct {
+	Pos lexer.Position
+
+	Name     string `parser:"@Ident"`
+	Optional bool   `parser:"@'?'?"`
+	Type     string `parser:"':' @Ident"`
+}
+
+type Index struct {
+	Pos lexer.Position
+
+	Unique bool          `parser:"'@' ( @'unique' | 'index' )"`
+	Fields []*IndexField `parser:"'(' @@ ( ',' @@ )* ')' ';'"`
+}
+
+type IndexField struct {
+	Pos lexer.Position
+
+	Name  string `parser:"( '[' )? ( @Ident )"`
+	Order string `parser:"( ',' @Ident ']' )?"`
 }
