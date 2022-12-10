@@ -17,7 +17,9 @@ import (
 )
 
 func TestCollection(t *testing.T) {
-	parser := participle.MustBuild[polylang.Collection]()
+	parser := participle.MustBuild[polylang.Collection](
+		participle.Lexer(polylang.PolylangLexer),
+	)
 
 	f, err := os.Open("./fixtures/collection.polylang")
 	if err != nil {
@@ -36,7 +38,9 @@ func TestCollection(t *testing.T) {
 }
 
 func TestField(t *testing.T) {
-	parser := participle.MustBuild[polylang.Field]()
+	parser := participle.MustBuild[polylang.Field](
+		participle.Lexer(polylang.PolylangLexer),
+	)
 
 	f, err := os.Open("./fixtures/field.polylang")
 	if err != nil {
@@ -60,7 +64,9 @@ func TestField(t *testing.T) {
 }
 
 func TestFunction(t *testing.T) {
-	parser := participle.MustBuild[polylang.Function]()
+	parser := participle.MustBuild[polylang.Function](
+		participle.Lexer(polylang.PolylangLexer),
+	)
 
 	f, err := os.Open("./fixtures/function.polylang")
 	if err != nil {
@@ -79,7 +85,9 @@ func TestFunction(t *testing.T) {
 }
 
 func TestParameter(t *testing.T) {
-	parser := participle.MustBuild[polylang.Parameter]()
+	parser := participle.MustBuild[polylang.Parameter](
+		participle.Lexer(polylang.PolylangLexer),
+	)
 
 	f, err := os.Open("./fixtures/parameter.polylang")
 	if err != nil {
@@ -103,7 +111,9 @@ func TestParameter(t *testing.T) {
 }
 
 func TestIndex(t *testing.T) {
-	parser := participle.MustBuild[polylang.Index]()
+	parser := participle.MustBuild[polylang.Index](
+		participle.Lexer(polylang.PolylangLexer),
+	)
 
 	f, err := os.Open("./fixtures/index.polylang")
 	if err != nil {
@@ -122,7 +132,9 @@ func TestIndex(t *testing.T) {
 }
 
 func TestUnique(t *testing.T) {
-	parser := participle.MustBuild[polylang.Index]()
+	parser := participle.MustBuild[polylang.Index](
+		participle.Lexer(polylang.PolylangLexer),
+	)
 
 	f, err := os.Open("./fixtures/unique.polylang")
 	if err != nil {
@@ -141,7 +153,9 @@ func TestUnique(t *testing.T) {
 }
 
 func TestIndexField(t *testing.T) {
-	parser := participle.MustBuild[polylang.IndexField]()
+	parser := participle.MustBuild[polylang.IndexField](
+		participle.Lexer(polylang.PolylangLexer),
+	)
 
 	f, err := os.Open("./fixtures/index_field.polylang")
 	if err != nil {
@@ -163,7 +177,9 @@ func TestIndexField(t *testing.T) {
 }
 
 func TestFull(t *testing.T) {
-	parser := participle.MustBuild[polylang.Collection]()
+	parser := participle.MustBuild[polylang.Collection](
+		participle.Lexer(polylang.PolylangLexer),
+	)
 
 	f, err := os.Open("./fixtures/full.polylang")
 	if err != nil {
