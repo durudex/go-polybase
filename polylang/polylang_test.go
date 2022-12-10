@@ -203,3 +203,24 @@ func TestFull(t *testing.T) {
 		t.Fatal("error: function name does not match")
 	}
 }
+
+func TestAssign(t *testing.T) {
+	parser := participle.MustBuild[polylang.Expression](
+		participle.Lexer(polylang.PolylangLexer),
+	)
+
+	f, err := os.Open("./fixtures/assign.polylang")
+	if err != nil {
+		t.Fatal("error: opening fixtures file: ", err)
+	}
+	defer f.Close()
+
+	got, err := parser.Parse("", f)
+	if err != nil {
+		t.Fatal("error: parsing polylang file: ", err)
+	}
+
+	if got.Assign[0] != "this.id" || got.Assign[1] != "id" {
+		t.Fatal("error: expression assigns does not match")
+	}
+}
