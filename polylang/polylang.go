@@ -41,10 +41,10 @@ type Field struct {
 type Function struct {
 	Pos lexer.Position
 
-	Name           string       `parser:"@Ident '('"`
-	Parameters     []*Parameter `parser:"( @@ ( ',' @@ )* )? ')'"`
-	ReturnType     string       `parser:"( ':' @Ident )?"`
-	StatementsCode string       `parser:"'{' ( @Ident )? '}'"`
+	Name       string       `parser:"@Ident '('"`
+	Parameters []*Parameter `parser:"( @@ ( ',' @@ )* )? ')'"`
+	ReturnType string       `parser:"( ':' @Ident )?"`
+	Statements *Statement   `parser:"'{' ( @@ )? '}'"`
 }
 
 type Parameter struct {
@@ -67,4 +67,20 @@ type IndexField struct {
 
 	Name  string `parser:"( '[' )? ( @Ident )"`
 	Order string `parser:"( ',' @Ident ']' )?"`
+}
+
+type Statement struct {
+	SmallStatement
+}
+
+type SmallStatement struct {
+	Pos lexer.Position
+
+	Expression []*Expression `parser:"@@*"`
+}
+
+type Expression struct {
+	Pos lexer.Position
+
+	Assign []string `parser:"@Ident '=' @Ident ';'"`
 }
