@@ -89,4 +89,5 @@ type If struct {
 
 	Expression *Expression  `parser:"'if' '(' @@ ')'"`
 	Statements []*Statement `parser:"'{' @@* '}'"`
+	Else       []*Statement `parser:"( 'else' '{' @@* '}' )?"`
 }
