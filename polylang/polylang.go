@@ -44,7 +44,7 @@ type Function struct {
 	Name       string       `parser:"@Ident '('"`
 	Parameters []*Parameter `parser:"( @@ ( ',' @@ )* )? ')'"`
 	ReturnType string       `parser:"( ':' @Ident )?"`
-	Statements *Statement   `parser:"'{' ( @@ )? '}'"`
+	Statements []*Statement `parser:"'{' ( @@* )? '}'"`
 }
 
 type Parameter struct {
@@ -70,17 +70,23 @@ type IndexField struct {
 }
 
 type Statement struct {
-	SmallStatement
-}
-
-type SmallStatement struct {
 	Pos lexer.Position
 
-	Expression []*Expression `parser:"@@*"`
+	Expression *Expression `parser:"@@ ';'"`
+	If         *If         `parser:"| @@"`
 }
 
 type Expression struct {
 	Pos lexer.Position
 
-	Assign []string `parser:"@Ident '=' @Ident ';'"`
+	Left     string `parser:"@Ident"`
+	Operator string `parser:"@( '=' '=' | '!' '=' | '=' )"`
+	Right    string `parser:"@Ident"`
+}
+
+type If struct {
+	Pos lexer.Position
+
+	Expression *Expression  `parser:"'if' '(' @@ ')'"`
+	Statements []*Statement `parser:"'{' @@* '}'"`
 }

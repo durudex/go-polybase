@@ -11,6 +11,6 @@ import "github.com/alecthomas/participle/v2/lexer"
 
 var PolylangLexer = lexer.MustSimple([]lexer.SimpleRule{
 	{Name: "Ident", Pattern: `[a-zA-Z_.][a-zA-Z0-9_.]*`},
-	{Name: "Punct", Pattern: `\[|]|[,:;={}()?@]`},
+	{Name: "Punct", Pattern: `\[|]|[,:;={}()?!@]`},
 	{Name: "whitespace", Pattern: `\s+`},
 })
