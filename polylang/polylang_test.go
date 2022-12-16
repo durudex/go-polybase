@@ -204,12 +204,12 @@ func TestFull(t *testing.T) {
 	}
 }
 
-func TestAssign(t *testing.T) {
+func TestExpression(t *testing.T) {
 	parser := participle.MustBuild[polylang.Expression](
 		participle.Lexer(polylang.PolylangLexer),
 	)
 
-	f, err := os.Open("./fixtures/assign.polylang")
+	f, err := os.Open("./fixtures/expression.polylang")
 	if err != nil {
 		t.Fatal("error: opening fixtures file: ", err)
 	}
@@ -220,7 +220,36 @@ func TestAssign(t *testing.T) {
 		t.Fatal("error: parsing polylang file: ", err)
 	}
 
-	if got.Assign[0] != "this.id" || got.Assign[1] != "id" {
-		t.Fatal("error: expression assigns does not match")
+	switch {
+	case got.Left != "this.id":
+		t.Fatal("error: expression left does not match")
+	case got.Operator != "=":
+		t.Fatal("error: expression operator does not match")
+	case got.Right != "id":
+		t.Fatal("error: expression right does not match")
+	}
+}
+
+func TestIf(t *testing.T) {
+	parser := participle.MustBuild[polylang.If](
+		participle.Lexer(polylang.PolylangLexer),
+	)
+
+	f, err := os.Open("./fixtures/if.polylang")
+	if err != nil {
+		t.Fatal("error: opening fixtures file: ", err)
+	}
+	defer f.Close()
+
+	got, err := parser.Parse("", f)
+	if err != nil {
+		t.Fatal("error: parsing polylang file: ", err)
+	}
+
+	switch {
+	case got.Expression.Left != "this.id":
+		t.Fatal("error: expression left does not match")
+	case got.Statements[0].Expression == nil:
+		t.Fatal("error: statement expression does not match")
 	}
 }
