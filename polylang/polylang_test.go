@@ -251,5 +251,7 @@ func TestIf(t *testing.T) {
 		t.Fatal("error: expression left does not match")
 	case got.Statements[0].Expression == nil:
 		t.Fatal("error: statement expression does not match")
+	case got.Else[0].Expression == nil:
+		t.Fatal("error: statement else expression does not match")
 	}
 }
