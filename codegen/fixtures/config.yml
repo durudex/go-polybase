@@ -1,0 +1,7 @@
+collection:
+  - "durudex/user"
+  - "durudex/post"
+
+package: "generated"
+
+directory: "generated"
