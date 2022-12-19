@@ -171,7 +171,7 @@ func TestIndexField(t *testing.T) {
 	switch {
 	case got.Name != "name":
 		t.Fatal("error: index field name does not match")
-	case got.Order != "desc":
+	case got.Order != polylang.Desc:
 		t.Fatal("error: index field order does not match")
 	}
 }
@@ -247,11 +247,11 @@ func TestIf(t *testing.T) {
 	}
 
 	switch {
-	case got.Expression.Left != "this.id":
-		t.Fatal("error: expression left does not match")
-	case got.Statements[0].Expression == nil:
+	case got.Condition.Left != "this.id":
+		t.Fatal("error: condition left does not match")
+	case got.Statements[0].Small.Expression == nil:
 		t.Fatal("error: statement expression does not match")
-	case got.Else[0].Expression == nil:
+	case got.Else[0].Small.Expression == nil:
 		t.Fatal("error: statement else expression does not match")
 	}
 }
