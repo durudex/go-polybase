@@ -1,3 +1,13 @@
-{% func Model(name string) %}
-type {%s name %} struct{}
+{% import "github.com/v1def/go-polybase/codegen" %}
+
+{% func Model(name string, fields []*codegen.Field) %}
+type {%s name %} struct {
+    {% for _, field := range fields %}
+    {% if field.Optional %}
+    {%s field.Name %} *{%s field.Type %}
+    {% continue %}
+    {% endif %}
+    {%s field.Name %} {%s field.Type %}
+    {% endfor %}
+}
 {% endfunc %}
