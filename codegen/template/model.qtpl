@@ -1,0 +1,3 @@
+{% func Model(name string) %}
+type {%s name %} struct{}
+{% endfunc %}
