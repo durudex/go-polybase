@@ -66,28 +66,40 @@ type IndexField struct {
 	Pos lexer.Position
 
 	Name  string `parser:"( '[' )? ( @Ident )"`
-	Order string `parser:"( ',' @Ident ']' )?"`
+	Order Order  `parser:"( ',' @@ ']' )?"`
 }
 
 type Statement struct {
-	Pos lexer.Position
+	CompoundStatement
+	SimpleStatement
+}
 
-	Expression *Expression `parser:"@@ ';'"`
-	If         *If         `parser:"| @@"`
+type CompoundStatement struct {
+	If *If `parser:"@@"`
+}
+
+type SimpleStatement struct {
+	Small *SmallStatement `parser:"| @@ ';'"`
+}
+
+type SmallStatement struct {
+	Throw      *Expression `parser:"'throw' @@"`
+	Expression *Expression `parser:"| @@"`
 }
 
 type Expression struct {
 	Pos lexer.Position
 
-	Left     string `parser:"@Ident"`
-	Operator string `parser:"@( '=' '=' | '!' '=' | '=' )"`
-	Right    string `parser:"@Ident"`
+	Left       string      `parser:"@( Ident | String )"`
+	Operator   string      `parser:"( @( '=' '=' | '!' '=' | '=' ) )?"`
+	Expression *Expression `parser:"( '(' @@ ')' )?"`
+	Right      string      `parser:"( @( Ident | String ) )?"`
 }
 
 type If struct {
 	Pos lexer.Position
 
-	Expression *Expression  `parser:"'if' '(' @@ ')'"`
+	Condition  *Expression  `parser:"'if' '(' @@ ')'"`
 	Statements []*Statement `parser:"'{' @@* '}'"`
 	Else       []*Statement `parser:"( 'else' '{' @@* '}' )?"`
 }
