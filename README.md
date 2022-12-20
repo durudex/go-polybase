@@ -3,14 +3,20 @@
 ## Setup
 
 ```bash
-go get github.com/v1def/go-polybase
+go get github.com/v1def/go-polybase@latest
+```
+
+## Install Polybase Gen CLI
+
+```bash
+go install github.com/v1def/go-polybase/cmd/polybase-gen@latest
 ```
 
 ## Todo
 - [ ] Full support for Polybase capabilities. (80%)
-- [ ] Schema API Generation.
+- [ ] Schema API Generation. (50%)
 - [ ] Polybase CLI.
-- [ ] Polylang parser. (60%)
+- [ ] Polylang parser. (80%)
 - [ ] Logging.
 
 ## ⚠️ License
