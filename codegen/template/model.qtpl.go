@@ -3,7 +3,11 @@
 
 package template
 
-import "github.com/v1def/go-polybase/polylang"
+import (
+	"github.com/v1def/go-polybase/polylang"
+
+	"github.com/iancoleman/strcase"
+)
 
 import (
 	qtio422016 "io"
@@ -25,17 +29,29 @@ type `)
 	for _, field := range fields {
 		if field.Optional {
 			qw422016.N().S(`	`)
-			qw422016.E().S(field.Name)
+			qw422016.E().S(strcase.ToCamel(field.Name))
 			qw422016.N().S(` *`)
 			qw422016.E().S(field.Type)
+			qw422016.N().S(` `)
+			qw422016.N().S("`")
+			qw422016.N().S(`json:"`)
+			qw422016.E().S(field.Name)
+			qw422016.N().S(`"`)
+			qw422016.N().S("`")
 			qw422016.N().S(`
 `)
 			continue
 		}
 		qw422016.N().S(`	`)
-		qw422016.E().S(field.Name)
+		qw422016.E().S(strcase.ToCamel(field.Name))
 		qw422016.N().S(` `)
 		qw422016.E().S(field.Type)
+		qw422016.N().S(` `)
+		qw422016.N().S("`")
+		qw422016.N().S(`json:"`)
+		qw422016.E().S(field.Name)
+		qw422016.N().S(`"`)
+		qw422016.N().S("`")
 		qw422016.N().S(`
 `)
 	}

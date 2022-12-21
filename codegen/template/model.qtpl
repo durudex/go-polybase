@@ -1,13 +1,17 @@
-{% import "github.com/v1def/go-polybase/polylang" %}
+{% import (
+	"github.com/v1def/go-polybase/polylang"
+
+	"github.com/iancoleman/strcase"
+) %}
 
 {% func Model(name string, fields []*polylang.Field) %}
 type {%s name %} struct {
 	{%- for _, field := range fields -%}
 	{%- if field.Optional -%}
-	{%s field.Name %} *{%s field.Type %}
+	{%s strcase.ToCamel(field.Name) %} *{%s field.Type %} `json:"{%s field.Name %}"`
 	{%- continue -%}
 	{%- endif -%}
-	{%s field.Name %} {%s field.Type %}
+	{%s  strcase.ToCamel(field.Name) %} {%s field.Type %} `json:"{%s field.Name %}"`
 	{%- endfor -%}
 }
 {% endfunc %}
