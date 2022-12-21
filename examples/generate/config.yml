@@ -1,0 +1,6 @@
+collection:
+  - "Collection"
+
+package: "generated"
+
+directory: "generated"
