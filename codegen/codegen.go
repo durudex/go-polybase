@@ -10,6 +10,8 @@ package codegen
 import (
 	"context"
 	"os"
+	"os/exec"
+	"path/filepath"
 
 	"github.com/v1def/go-polybase"
 	"github.com/v1def/go-polybase/codegen/template"
@@ -26,8 +28,9 @@ type GenesisCollection struct {
 }
 
 type ParsedCollection struct {
-	Name   string
-	Fields []*polylang.Field
+	Name      string
+	Fields    []*polylang.Field
+	Functions []*polylang.Function
 }
 
 type Codegen interface {
@@ -85,8 +88,18 @@ func (c *codegen) generateFile(coll *ParsedCollection) error {
 
 	template.WriteHeader(f, c.config.Package)
 	template.WriteModel(f, coll.Name, coll.Fields)
+	template.WriteFunction(f, coll.Name, coll.Functions)
 
-	return nil
+	return c.fmt()
+}
+
+func (c *codegen) fmt() error {
+	dir, err := os.Getwd()
+	if err != nil {
+		return err
+	}
+
+	return exec.Command("go", "fmt", filepath.Join(dir, c.config.Directory)).Run()
 }
 
 func (c *codegen) checkDir() error {
@@ -118,13 +131,20 @@ func (c *codegen) astCollection(ctx context.Context, id string) (*polylang.Colle
 
 func (c *codegen) parseAst(ast *polylang.Collection) *ParsedCollection {
 	collection := &ParsedCollection{
-		Name:   ast.Name,
-		Fields: make([]*polylang.Field, 0),
+		Name:      ast.Name,
+		Fields:    make([]*polylang.Field, 0),
+		Functions: make([]*polylang.Function, 0),
 	}
 
 	for _, item := range ast.Items {
-		if item.Field != nil {
+		switch {
+		case item.Field != nil:
 			collection.Fields = append(collection.Fields, item.Field)
+		case item.Function != nil:
+			collection.Functions = append(collection.Functions, &polylang.Function{
+				Name:       item.Function.Name,
+				Parameters: item.Function.Parameters,
+			})
 		}
 	}
 

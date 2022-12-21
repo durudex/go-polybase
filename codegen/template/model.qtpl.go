@@ -23,7 +23,7 @@ var (
 func StreamModel(qw422016 *qt422016.Writer, name string, fields []*polylang.Field) {
 	qw422016.N().S(`
 type `)
-	qw422016.E().S(name)
+	qw422016.E().S(strcase.ToCamel(name))
 	qw422016.N().S(` struct {
 `)
 	for _, field := range fields {

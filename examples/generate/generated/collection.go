@@ -2,10 +2,15 @@
 
 package generated
 
+import "context"
+
 type Collection struct {
-	Id string `json:"id"`
-	Name *string `json:"name"`
+	Id                string  `json:"id"`
+	Name              *string `json:"name"`
 	LastRecordUpdated *string `json:"lastRecordUpdated"`
-	Code *string `json:"code"`
-	PublicKey *string `json:"publicKey"`
+	Code              *string `json:"code"`
+	PublicKey         *string `json:"publicKey"`
 }
+
+func CollectionConstructor(ctx context.Context) {}
+func CollectionUpdateCode(ctx context.Context)  {}
