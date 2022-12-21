@@ -35,7 +35,9 @@ func StreamCollection(qw422016 *qt422016.Writer, id, coll string, funcs []*polyl
 		qw422016.N().S(`,input *`)
 		qw422016.E().S(strcase.ToCamel(coll) + strcase.ToCamel(fc.Name))
 		qw422016.N().S(`Input`)
-		qw422016.N().S(`) error
+		qw422016.N().S(`) (*polybase.SingleResponse[`)
+		qw422016.E().S(strcase.ToCamel(coll))
+		qw422016.N().S(`], error)
 `)
 	}
 	qw422016.N().S(`}

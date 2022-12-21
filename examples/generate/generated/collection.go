@@ -16,8 +16,8 @@ type Collection struct {
 	PublicKey         *string `json:"publicKey"`
 }
 type ICollection interface {
-	Constructor(ctx context.Context, input *CollectionConstructorInput) error
-	UpdateCode(ctx context.Context, id string, input *CollectionUpdateCodeInput) error
+	Constructor(ctx context.Context, input *CollectionConstructorInput) (*polybase.SingleResponse[Collection], error)
+	UpdateCode(ctx context.Context, id string, input *CollectionUpdateCodeInput) (*polybase.SingleResponse[Collection], error)
 }
 
 type collection struct{ coll polybase.Collection }
@@ -31,14 +31,16 @@ type CollectionConstructorInput struct {
 	Code string `json:"code"`
 }
 
-func (c *collection) Constructor(ctx context.Context, input *CollectionConstructorInput) error {
-	return c.coll.Create(ctx, polybase.ParseInput(input))
+func (c *collection) Constructor(ctx context.Context, input *CollectionConstructorInput) (*polybase.SingleResponse[Collection], error) {
+	var response polybase.SingleResponse[Collection]
+	return &response, c.coll.Create(ctx, polybase.ParseInput(input), &response)
 }
 
 type CollectionUpdateCodeInput struct {
 	Code string `json:"code"`
 }
 
-func (c *collection) UpdateCode(ctx context.Context, id string, input *CollectionUpdateCodeInput) error {
-	return c.coll.Record(id).Call(ctx, "updateCode", polybase.ParseInput(input))
+func (c *collection) UpdateCode(ctx context.Context, id string, input *CollectionUpdateCodeInput) (*polybase.SingleResponse[Collection], error) {
+	var response polybase.SingleResponse[Collection]
+	return &response, c.coll.Record(id).Call(ctx, "updateCode", polybase.ParseInput(input), &response)
 }

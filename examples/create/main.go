@@ -9,15 +9,29 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/v1def/go-polybase"
 )
 
-func main() {
-	coll := polybase.New(polybase.Config{
-		URL: polybase.TestnetURL,
-	}).Collection("polybase/todo")
+type Todo struct {
+	ID        string `json:"id"`
+	Title     string `json:"title"`
+	Content   string `json:"content"`
+	Completed bool   `json:"completed"`
+}
 
-	coll.Create(context.Background(), []any{time.Now().String(), "go-polybase", "example", 0})
+func main() {
+	db := polybase.New(polybase.Config{URL: polybase.TestnetURL})
+	coll := db.Collection("polybase/todo")
+
+	var response polybase.SingleResponse[Todo]
+
+	coll.Create(context.Background(), []any{time.Now().String(), "go-polybase", "example", 0}, &response)
+
+	fmt.Println("ID:", response.Data.ID)
+	fmt.Println("Title:", response.Data.Title)
+	fmt.Println("Content:", response.Data.Content)
+	fmt.Println("Completed:", response.Data.Completed)
 }

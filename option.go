@@ -15,7 +15,7 @@ import (
 
 type Option interface {
 	Get(ctx context.Context, v any) error
-	Call(ctx context.Context, method string, v []any) error
+	Call(ctx context.Context, method string, args []any, v any) error
 }
 
 type option struct {
@@ -36,11 +36,11 @@ func (o option) Get(ctx context.Context, v any) error {
 	return o.client.MakeRequest(ctx, req, v)
 }
 
-func (o option) Call(ctx context.Context, method string, v []any) error {
+func (o option) Call(ctx context.Context, method string, args []any, v any) error {
 	req := &Request{
 		Endpoint: o.endpoint + fmt.Sprintf("/call/%s", url.QueryEscape(method)),
 		Method:   "POST",
-		Body:     Body{Args: v},
+		Body:     Body{Args: args},
 	}
 
 	return o.client.MakeRequest(ctx, req, v)
