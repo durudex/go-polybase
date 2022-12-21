@@ -27,7 +27,11 @@ func (c *`)
 	qw422016.N().S(`) `)
 	qw422016.E().S(strcase.ToCamel(fc.Name))
 	qw422016.N().S(`(`)
-	qw422016.N().S(`ctx context.Context, input *`)
+	qw422016.N().S(`ctx context.Context`)
+	if fc.Name != "constructor" {
+		qw422016.N().S(`, id string`)
+	}
+	qw422016.N().S(`,input *`)
 	qw422016.E().S(strcase.ToCamel(coll) + strcase.ToCamel(fc.Name))
 	qw422016.N().S(`Input`)
 	qw422016.N().S(`) {}

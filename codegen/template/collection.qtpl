@@ -4,16 +4,19 @@
 	"github.com/iancoleman/strcase"
 ) %}
 
-{%- func Collection(coll string, funcs []*polylang.Function) -%}
+{%- func Collection(id, coll string, funcs []*polylang.Function) -%}
 type I{%s strcase.ToCamel(coll) %} interface {
 	{%- for _, fc := range funcs -%}
-	{%s strcase.ToCamel(fc.Name) %}(context.Context, *{%s strcase.ToCamel(coll) + strcase.ToCamel(fc.Name) %}Input)
+	{%s strcase.ToCamel(fc.Name) %}(ctx context.Context {% stripspace %}
+		{% if fc.Name != "constructor" %}, id string {% endif %},
+		input *{%s strcase.ToCamel(coll) + strcase.ToCamel(fc.Name) %}Input
+	{% endstripspace %})
 	{%- endfor -%}
 }
 
-type {%s strcase.ToLowerCamel(coll) %} struct{ db polybase.Polybase }
+type {%s strcase.ToLowerCamel(coll) %} struct{ coll polybase.Collection }
 
 func New{%s strcase.ToCamel(coll) %}(db polybase.Polybase) I{%s strcase.ToCamel(coll) %} {
-	return &{%s strcase.ToLowerCamel(coll) %}{db: db}
+	return &{%s strcase.ToLowerCamel(coll) %}{coll: db.Collection("{%s id %}")}
 }
 {% endfunc %}
