@@ -88,6 +88,7 @@ func (c *codegen) generateFile(coll *ParsedCollection) error {
 
 	template.WriteHeader(f, c.config.Package)
 	template.WriteImport(f)
+	template.WriteModel(f, coll.Name, coll.Fields)
 	template.WriteCollection(f, coll.Name, coll.Functions)
 
 	for _, fc := range coll.Functions {

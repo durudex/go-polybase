@@ -20,44 +20,46 @@ var (
 	_ = qt422016.AcquireByteBuffer
 )
 
-func StreamCollection(qw422016 *qt422016.Writer, name string, funcs []*polylang.Function) {
-	qw422016.N().S(`type `)
-	qw422016.E().S(strcase.ToCamel(name))
+func StreamCollection(qw422016 *qt422016.Writer, coll string, funcs []*polylang.Function) {
+	qw422016.N().S(`type I`)
+	qw422016.E().S(strcase.ToCamel(coll))
 	qw422016.N().S(` interface {
 `)
 	for _, fc := range funcs {
 		qw422016.N().S(`	`)
 		qw422016.E().S(strcase.ToCamel(fc.Name))
-		qw422016.N().S(`(context.Context)
+		qw422016.N().S(`(context.Context, *`)
+		qw422016.E().S(strcase.ToCamel(coll) + strcase.ToCamel(fc.Name))
+		qw422016.N().S(`Input)
 `)
 	}
 	qw422016.N().S(`}
 
 type `)
-	qw422016.E().S(strcase.ToLowerCamel(name))
+	qw422016.E().S(strcase.ToLowerCamel(coll))
 	qw422016.N().S(` struct{ db polybase.Polybase }
 
 func New`)
-	qw422016.E().S(strcase.ToCamel(name))
-	qw422016.N().S(`(db polybase.Polybase) `)
-	qw422016.E().S(strcase.ToCamel(name))
+	qw422016.E().S(strcase.ToCamel(coll))
+	qw422016.N().S(`(db polybase.Polybase) I`)
+	qw422016.E().S(strcase.ToCamel(coll))
 	qw422016.N().S(` {
 	return &`)
-	qw422016.E().S(strcase.ToLowerCamel(name))
+	qw422016.E().S(strcase.ToLowerCamel(coll))
 	qw422016.N().S(`{db: db}
 }
 `)
 }
 
-func WriteCollection(qq422016 qtio422016.Writer, name string, funcs []*polylang.Function) {
+func WriteCollection(qq422016 qtio422016.Writer, coll string, funcs []*polylang.Function) {
 	qw422016 := qt422016.AcquireWriter(qq422016)
-	StreamCollection(qw422016, name, funcs)
+	StreamCollection(qw422016, coll, funcs)
 	qt422016.ReleaseWriter(qw422016)
 }
 
-func Collection(name string, funcs []*polylang.Function) string {
+func Collection(coll string, funcs []*polylang.Function) string {
 	qb422016 := qt422016.AcquireByteBuffer()
-	WriteCollection(qb422016, name, funcs)
+	WriteCollection(qb422016, coll, funcs)
 	qs422016 := string(qb422016.B)
 	qt422016.ReleaseByteBuffer(qb422016)
 	return qs422016
