@@ -10,13 +10,13 @@ package codegen
 import (
 	"context"
 	"os"
-	"strings"
 
 	"github.com/v1def/go-polybase"
 	"github.com/v1def/go-polybase/codegen/template"
 	"github.com/v1def/go-polybase/polylang"
 
 	"github.com/alecthomas/participle/v2"
+	"github.com/iancoleman/strcase"
 )
 
 const GenesisCollectionID = "Collection"
@@ -62,7 +62,7 @@ func (c *codegen) Generate() error {
 			return err
 		}
 
-		if err := c.generate(c.parseAst(ast)); err != nil {
+		if err := c.generateFile(c.parseAst(ast)); err != nil {
 			return err
 		}
 	}
@@ -70,18 +70,12 @@ func (c *codegen) Generate() error {
 	return nil
 }
 
-func (c *codegen) generate(coll *ParsedCollection) error {
-	if err := os.MkdirAll(c.config.Directory, 0755); err != nil {
-		if os.IsExist(err) {
-			goto gen
-		}
-
+func (c *codegen) generateFile(coll *ParsedCollection) error {
+	if err := c.checkDir(); err != nil {
 		return err
 	}
 
-gen:
-
-	path := c.config.Directory + "/" + strings.ToLower(coll.Name) + ".go"
+	path := c.config.Directory + "/" + strcase.ToSnake(coll.Name) + ".go"
 
 	f, err := os.Create(path)
 	if err != nil {
@@ -91,6 +85,19 @@ gen:
 
 	template.WriteHeader(f, c.config.Package)
 	template.WriteModel(f, coll.Name, coll.Fields)
+
+	return nil
+}
+
+func (c *codegen) checkDir() error {
+	if err := os.MkdirAll(c.config.Directory, 0755); err != nil {
+		if os.IsExist(err) {
+			// TODO: add delete old files by option
+			return nil
+		}
+
+		return err
+	}
 
 	return nil
 }

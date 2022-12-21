@@ -5,7 +5,7 @@
 ) %}
 
 {% func Model(name string, fields []*polylang.Field) %}
-type {%s name %} struct {
+type {%s strcase.ToCamel(name) %} struct {
 	{%- for _, field := range fields -%}
 	{%- if field.Optional -%}
 	{%s strcase.ToCamel(field.Name) %} *{%s field.Type %} `json:"{%s field.Name %}"`
