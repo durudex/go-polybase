@@ -7,14 +7,16 @@
 
 package polybase
 
-import (
-	"reflect"
-)
+import "reflect"
 
 func ParseInput(v any) []any {
 	e := reflect.ValueOf(v).Elem()
 
-	var res []any
+	if e.Type().Kind() != reflect.Struct {
+		return nil
+	}
+
+	res := make([]any, 0, e.NumField())
 
 	for i := 0; i < e.NumField(); i++ {
 		res = append(res, e.Field(i).Interface())
