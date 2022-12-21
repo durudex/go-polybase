@@ -27,24 +27,12 @@ type `)
 	qw422016.N().S(` struct {
 `)
 	for _, field := range fields {
-		if field.Optional {
-			qw422016.N().S(`	`)
-			qw422016.E().S(strcase.ToCamel(field.Name))
-			qw422016.N().S(` *`)
-			qw422016.E().S(field.Type)
-			qw422016.N().S(` `)
-			qw422016.N().S("`")
-			qw422016.N().S(`json:"`)
-			qw422016.E().S(field.Name)
-			qw422016.N().S(`"`)
-			qw422016.N().S("`")
-			qw422016.N().S(`
-`)
-			continue
-		}
 		qw422016.N().S(`	`)
 		qw422016.E().S(strcase.ToCamel(field.Name))
 		qw422016.N().S(` `)
+		if field.Optional {
+			qw422016.N().S(`*`)
+		}
 		qw422016.E().S(field.Type)
 		qw422016.N().S(` `)
 		qw422016.N().S("`")

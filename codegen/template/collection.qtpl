@@ -4,16 +4,16 @@
 	"github.com/iancoleman/strcase"
 ) %}
 
-{%- func Collection(name string, funcs []*polylang.Function) -%}
-type {%s strcase.ToCamel(name) %} interface {
+{%- func Collection(coll string, funcs []*polylang.Function) -%}
+type I{%s strcase.ToCamel(coll) %} interface {
 	{%- for _, fc := range funcs -%}
-	{%s strcase.ToCamel(fc.Name) %}(context.Context)
+	{%s strcase.ToCamel(fc.Name) %}(context.Context, *{%s strcase.ToCamel(coll) + strcase.ToCamel(fc.Name) %}Input)
 	{%- endfor -%}
 }
 
-type {%s strcase.ToLowerCamel(name) %} struct{ db polybase.Polybase }
+type {%s strcase.ToLowerCamel(coll) %} struct{ db polybase.Polybase }
 
-func New{%s strcase.ToCamel(name) %}(db polybase.Polybase) {%s strcase.ToCamel(name) %} {
-	return &{%s strcase.ToLowerCamel(name) %}{db: db}
+func New{%s strcase.ToCamel(coll) %}(db polybase.Polybase) I{%s strcase.ToCamel(coll) %} {
+	return &{%s strcase.ToLowerCamel(coll) %}{db: db}
 }
 {% endfunc %}

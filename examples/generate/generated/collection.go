@@ -8,14 +8,21 @@ import (
 	"github.com/v1def/go-polybase"
 )
 
-type Collection interface {
-	Constructor(context.Context)
-	UpdateCode(context.Context)
+type Collection struct {
+	Id                string  `json:"id"`
+	Name              *string `json:"name"`
+	LastRecordUpdated *string `json:"lastRecordUpdated"`
+	Code              *string `json:"code"`
+	PublicKey         *string `json:"publicKey"`
+}
+type ICollection interface {
+	Constructor(context.Context, *CollectionConstructorInput)
+	UpdateCode(context.Context, *CollectionUpdateCodeInput)
 }
 
 type collection struct{ db polybase.Polybase }
 
-func NewCollection(db polybase.Polybase) Collection {
+func NewCollection(db polybase.Polybase) ICollection {
 	return &collection{db: db}
 }
 
@@ -24,10 +31,10 @@ type CollectionConstructorInput struct {
 	Code string `json:"code"`
 }
 
-func (c *collection) Constructor(ctx context.Context) {}
+func (c *collection) Constructor(ctx context.Context, input *CollectionConstructorInput) {}
 
 type CollectionUpdateCodeInput struct {
 	Code string `json:"code"`
 }
 
-func (c *collection) UpdateCode(ctx context.Context) {}
+func (c *collection) UpdateCode(ctx context.Context, input *CollectionUpdateCodeInput) {}
