@@ -1,0 +1,11 @@
+{% import (
+	"github.com/v1def/go-polybase/polylang"
+
+	"github.com/iancoleman/strcase"
+) %}
+
+{% func Function(name string, funcs []*polylang.Function) %}
+{%- for _, fc := range funcs -%}
+func {%s strcase.ToCamel(name) + strcase.ToCamel(fc.Name) %}(ctx context.Context) {}
+{%- endfor -%}
+{% endfunc %}

@@ -20,6 +20,8 @@ func StreamHeader(qw422016 *qt422016.Writer, name string) {
 package `)
 	qw422016.E().S(name)
 	qw422016.N().S(`
+
+import "context"
 `)
 }
 
