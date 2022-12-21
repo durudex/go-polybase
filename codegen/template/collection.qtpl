@@ -10,7 +10,7 @@ type I{%s strcase.ToCamel(coll) %} interface {
 	{%s strcase.ToCamel(fc.Name) %}(ctx context.Context {% stripspace %}
 		{% if fc.Name != "constructor" %}, id string {% endif %},
 		input *{%s strcase.ToCamel(coll) + strcase.ToCamel(fc.Name) %}Input
-	{% endstripspace %})
+	{% endstripspace %}) error
 	{%- endfor -%}
 }
 

@@ -8,5 +8,11 @@
 func (c *{%s strcase.ToLowerCamel(coll) %}) {%s strcase.ToCamel(fc.Name) %}({% stripspace %}
 	ctx context.Context {% if fc.Name != "constructor" %}, id string {% endif %},
 	input *{%s strcase.ToCamel(coll) + strcase.ToCamel(fc.Name) %}Input
-	{% endstripspace %}) {}
+	{% endstripspace %}) error {
+	{%- if fc.Name == "constructor" -%}
+	return c.coll.Create(ctx, polybase.ParseInput(input))
+	{%- else -%}
+	return c.coll.Record(id).Call(ctx, "{%s fc.Name %}", polybase.ParseInput(input))
+	{%- endif -%}
+}
 {% endfunc %}

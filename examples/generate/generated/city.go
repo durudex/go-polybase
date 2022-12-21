@@ -14,9 +14,9 @@ type City struct {
 	Country *string `json:"country"`
 }
 type ICity interface {
-	Constructor(ctx context.Context, input *CityConstructorInput)
-	SetCountry(ctx context.Context, id string, input *CitySetCountryInput)
-	UpdateName(ctx context.Context, id string, input *CityUpdateNameInput)
+	Constructor(ctx context.Context, input *CityConstructorInput) error
+	SetCountry(ctx context.Context, id string, input *CitySetCountryInput) error
+	UpdateName(ctx context.Context, id string, input *CityUpdateNameInput) error
 }
 
 type city struct{ coll polybase.Collection }
@@ -30,16 +30,22 @@ type CityConstructorInput struct {
 	Name string `json:"name"`
 }
 
-func (c *city) Constructor(ctx context.Context, input *CityConstructorInput) {}
+func (c *city) Constructor(ctx context.Context, input *CityConstructorInput) error {
+	return c.coll.Create(ctx, polybase.ParseInput(input))
+}
 
 type CitySetCountryInput struct {
 	Country string `json:"country"`
 }
 
-func (c *city) SetCountry(ctx context.Context, id string, input *CitySetCountryInput) {}
+func (c *city) SetCountry(ctx context.Context, id string, input *CitySetCountryInput) error {
+	return c.coll.Record(id).Call(ctx, "setCountry", polybase.ParseInput(input))
+}
 
 type CityUpdateNameInput struct {
 	Name string `json:"name"`
 }
 
-func (c *city) UpdateName(ctx context.Context, id string, input *CityUpdateNameInput) {}
+func (c *city) UpdateName(ctx context.Context, id string, input *CityUpdateNameInput) error {
+	return c.coll.Record(id).Call(ctx, "updateName", polybase.ParseInput(input))
+}
