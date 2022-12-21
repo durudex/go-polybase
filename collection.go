@@ -16,7 +16,7 @@ import (
 type Collection interface {
 	Record(id string) Option
 	Get(ctx context.Context, v any, params ...string) error
-	Create(ctx context.Context, v []any) error
+	Create(ctx context.Context, args []any, v any) error
 }
 
 type collection struct {
@@ -41,11 +41,11 @@ func (c *collection) Get(ctx context.Context, v any, params ...string) error {
 	return c.client.MakeRequest(ctx, req, v)
 }
 
-func (c *collection) Create(ctx context.Context, v []any) error {
+func (c *collection) Create(ctx context.Context, args []any, v any) error {
 	req := &Request{
 		Endpoint: fmt.Sprintf("/collections/%s/records", c.name),
 		Method:   "POST",
-		Body:     Body{Args: v},
+		Body:     Body{Args: args},
 	}
 
 	return c.client.MakeRequest(ctx, req, v)

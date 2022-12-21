@@ -14,9 +14,9 @@ type City struct {
 	Country *string `json:"country"`
 }
 type ICity interface {
-	Constructor(ctx context.Context, input *CityConstructorInput) error
-	SetCountry(ctx context.Context, id string, input *CitySetCountryInput) error
-	UpdateName(ctx context.Context, id string, input *CityUpdateNameInput) error
+	Constructor(ctx context.Context, input *CityConstructorInput) (*polybase.SingleResponse[City], error)
+	SetCountry(ctx context.Context, id string, input *CitySetCountryInput) (*polybase.SingleResponse[City], error)
+	UpdateName(ctx context.Context, id string, input *CityUpdateNameInput) (*polybase.SingleResponse[City], error)
 }
 
 type city struct{ coll polybase.Collection }
@@ -30,22 +30,25 @@ type CityConstructorInput struct {
 	Name string `json:"name"`
 }
 
-func (c *city) Constructor(ctx context.Context, input *CityConstructorInput) error {
-	return c.coll.Create(ctx, polybase.ParseInput(input))
+func (c *city) Constructor(ctx context.Context, input *CityConstructorInput) (*polybase.SingleResponse[City], error) {
+	var response polybase.SingleResponse[City]
+	return &response, c.coll.Create(ctx, polybase.ParseInput(input), &response)
 }
 
 type CitySetCountryInput struct {
 	Country string `json:"country"`
 }
 
-func (c *city) SetCountry(ctx context.Context, id string, input *CitySetCountryInput) error {
-	return c.coll.Record(id).Call(ctx, "setCountry", polybase.ParseInput(input))
+func (c *city) SetCountry(ctx context.Context, id string, input *CitySetCountryInput) (*polybase.SingleResponse[City], error) {
+	var response polybase.SingleResponse[City]
+	return &response, c.coll.Record(id).Call(ctx, "setCountry", polybase.ParseInput(input), &response)
 }
 
 type CityUpdateNameInput struct {
 	Name string `json:"name"`
 }
 
-func (c *city) UpdateName(ctx context.Context, id string, input *CityUpdateNameInput) error {
-	return c.coll.Record(id).Call(ctx, "updateName", polybase.ParseInput(input))
+func (c *city) UpdateName(ctx context.Context, id string, input *CityUpdateNameInput) (*polybase.SingleResponse[City], error) {
+	var response polybase.SingleResponse[City]
+	return &response, c.coll.Record(id).Call(ctx, "updateName", polybase.ParseInput(input), &response)
 }

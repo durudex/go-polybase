@@ -20,9 +20,8 @@ type Collection struct {
 }
 
 func main() {
-	coll := polybase.New(polybase.Config{
-		URL: polybase.TestnetURL,
-	}).Collection("Collection")
+	db := polybase.New(polybase.Config{URL: polybase.TestnetURL})
+	coll := db.Collection("polybase/todo")
 
 	var response polybase.Response[Collection]
 
