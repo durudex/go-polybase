@@ -20,26 +20,25 @@ var (
 	_ = qt422016.AcquireByteBuffer
 )
 
-func StreamFunction(qw422016 *qt422016.Writer, name string, funcs []*polylang.Function) {
+func StreamFunction(qw422016 *qt422016.Writer, coll string, fc *polylang.Function) {
 	qw422016.N().S(`
+func (c *`)
+	qw422016.E().S(strcase.ToLowerCamel(coll))
+	qw422016.N().S(`) `)
+	qw422016.E().S(strcase.ToCamel(fc.Name))
+	qw422016.N().S(`(ctx context.Context) {}
 `)
-	for _, fc := range funcs {
-		qw422016.N().S(`func `)
-		qw422016.E().S(strcase.ToCamel(name) + strcase.ToCamel(fc.Name))
-		qw422016.N().S(`(ctx context.Context) {}
-`)
-	}
 }
 
-func WriteFunction(qq422016 qtio422016.Writer, name string, funcs []*polylang.Function) {
+func WriteFunction(qq422016 qtio422016.Writer, coll string, fc *polylang.Function) {
 	qw422016 := qt422016.AcquireWriter(qq422016)
-	StreamFunction(qw422016, name, funcs)
+	StreamFunction(qw422016, coll, fc)
 	qt422016.ReleaseWriter(qw422016)
 }
 
-func Function(name string, funcs []*polylang.Function) string {
+func Function(coll string, fc *polylang.Function) string {
 	qb422016 := qt422016.AcquireByteBuffer()
-	WriteFunction(qb422016, name, funcs)
+	WriteFunction(qb422016, coll, fc)
 	qs422016 := string(qb422016.B)
 	qt422016.ReleaseByteBuffer(qb422016)
 	return qs422016

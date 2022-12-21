@@ -1,0 +1,19 @@
+{% import (
+	"github.com/v1def/go-polybase/polylang"
+
+	"github.com/iancoleman/strcase"
+) %}
+
+{%- func Collection(name string, funcs []*polylang.Function) -%}
+type {%s strcase.ToCamel(name) %} interface {
+	{%- for _, fc := range funcs -%}
+	{%s strcase.ToCamel(fc.Name) %}(context.Context)
+	{%- endfor -%}
+}
+
+type {%s strcase.ToLowerCamel(name) %} struct{ db polybase.Polybase }
+
+func New{%s strcase.ToCamel(name) %}(db polybase.Polybase) {%s strcase.ToCamel(name) %} {
+	return &{%s strcase.ToLowerCamel(name) %}{db: db}
+}
+{% endfunc %}
