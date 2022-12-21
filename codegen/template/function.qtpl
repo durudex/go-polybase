@@ -4,8 +4,6 @@
 	"github.com/iancoleman/strcase"
 ) %}
 
-{% func Function(name string, funcs []*polylang.Function) %}
-{%- for _, fc := range funcs -%}
-func {%s strcase.ToCamel(name) + strcase.ToCamel(fc.Name) %}(ctx context.Context) {}
-{%- endfor -%}
+{% func Function(coll string, fc *polylang.Function) %}
+func (c *{%s strcase.ToLowerCamel(coll) %}) {%s strcase.ToCamel(fc.Name) %}(ctx context.Context) {}
 {% endfunc %}

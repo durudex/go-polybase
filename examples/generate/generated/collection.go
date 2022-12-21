@@ -2,15 +2,32 @@
 
 package generated
 
-import "context"
+import (
+	"context"
 
-type Collection struct {
-	Id                string  `json:"id"`
-	Name              *string `json:"name"`
-	LastRecordUpdated *string `json:"lastRecordUpdated"`
-	Code              *string `json:"code"`
-	PublicKey         *string `json:"publicKey"`
+	"github.com/v1def/go-polybase"
+)
+
+type Collection interface {
+	Constructor(context.Context)
+	UpdateCode(context.Context)
 }
 
-func CollectionConstructor(ctx context.Context) {}
-func CollectionUpdateCode(ctx context.Context)  {}
+type collection struct{ db polybase.Polybase }
+
+func NewCollection(db polybase.Polybase) Collection {
+	return &collection{db: db}
+}
+
+type CollectionConstructorInput struct {
+	Id   string `json:"id"`
+	Code string `json:"code"`
+}
+
+func (c *collection) Constructor(ctx context.Context) {}
+
+type CollectionUpdateCodeInput struct {
+	Code string `json:"code"`
+}
+
+func (c *collection) UpdateCode(ctx context.Context) {}

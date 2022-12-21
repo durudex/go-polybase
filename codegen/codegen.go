@@ -87,8 +87,13 @@ func (c *codegen) generateFile(coll *ParsedCollection) error {
 	defer f.Close()
 
 	template.WriteHeader(f, c.config.Package)
-	template.WriteModel(f, coll.Name, coll.Fields)
-	template.WriteFunction(f, coll.Name, coll.Functions)
+	template.WriteImport(f)
+	template.WriteCollection(f, coll.Name, coll.Functions)
+
+	for _, fc := range coll.Functions {
+		template.WriteInput(f, coll.Name, fc.Name, fc.Parameters)
+		template.WriteFunction(f, coll.Name, fc)
+	}
 
 	return c.fmt()
 }
