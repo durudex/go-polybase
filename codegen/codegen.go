@@ -17,8 +17,6 @@ import (
 	"github.com/v1def/go-polybase/polylang"
 
 	"github.com/alecthomas/participle/v2"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 )
 
 const GenesisCollectionID = "Collection"
@@ -91,9 +89,8 @@ gen:
 	}
 	defer f.Close()
 
-	f.WriteString("package " + c.config.Package + "\n")
-
-	template.WriteModel(f, c.title(coll.Name), coll.Fields)
+	template.WriteHeader(f, c.config.Package)
+	template.WriteModel(f, coll.Name, coll.Fields)
 
 	return nil
 }
@@ -120,15 +117,9 @@ func (c *codegen) parseAst(ast *polylang.Collection) *ParsedCollection {
 
 	for _, item := range ast.Items {
 		if item.Field != nil {
-			collection.Fields = append(collection.Fields, &polylang.Field{
-				Name:     c.title(item.Field.Name),
-				Optional: item.Field.Optional,
-				Type:     item.Field.Type,
-			})
+			collection.Fields = append(collection.Fields, item.Field)
 		}
 	}
 
 	return collection
 }
-
-func (c *codegen) title(s string) string { return cases.Title(language.English).String(s) }
