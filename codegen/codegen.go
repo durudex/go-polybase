@@ -28,6 +28,7 @@ type GenesisCollection struct {
 }
 
 type ParsedCollection struct {
+	ID        string
 	Name      string
 	Fields    []*polylang.Field
 	Functions []*polylang.Function
@@ -65,7 +66,7 @@ func (c *codegen) Generate() error {
 			return err
 		}
 
-		if err := c.generateFile(c.parseAst(ast)); err != nil {
+		if err := c.generateFile(c.parseAst(id, ast)); err != nil {
 			return err
 		}
 	}
@@ -87,9 +88,8 @@ func (c *codegen) generateFile(coll *ParsedCollection) error {
 	defer f.Close()
 
 	template.WriteHeader(f, c.config.Package)
-	template.WriteImport(f)
 	template.WriteModel(f, coll.Name, coll.Fields)
-	template.WriteCollection(f, coll.Name, coll.Functions)
+	template.WriteCollection(f, coll.ID, coll.Name, coll.Functions)
 
 	for _, fc := range coll.Functions {
 		template.WriteInput(f, coll.Name, fc.Name, fc.Parameters)
@@ -135,8 +135,9 @@ func (c *codegen) astCollection(ctx context.Context, id string) (*polylang.Colle
 	return parser.ParseString("", response.Data.Code)
 }
 
-func (c *codegen) parseAst(ast *polylang.Collection) *ParsedCollection {
+func (c *codegen) parseAst(id string, ast *polylang.Collection) *ParsedCollection {
 	collection := &ParsedCollection{
+		ID:        id,
 		Name:      ast.Name,
 		Fields:    make([]*polylang.Field, 0),
 		Functions: make([]*polylang.Function, 0),

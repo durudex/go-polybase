@@ -6,6 +6,7 @@
 
 {% func Function(coll string, fc *polylang.Function) %}
 func (c *{%s strcase.ToLowerCamel(coll) %}) {%s strcase.ToCamel(fc.Name) %}({% stripspace %}
-	ctx context.Context, input *{%s strcase.ToCamel(coll) + strcase.ToCamel(fc.Name) %}Input
+	ctx context.Context {% if fc.Name != "constructor" %}, id string {% endif %},
+	input *{%s strcase.ToCamel(coll) + strcase.ToCamel(fc.Name) %}Input
 	{% endstripspace %}) {}
 {% endfunc %}
