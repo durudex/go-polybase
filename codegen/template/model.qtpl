@@ -7,7 +7,8 @@
 {% func Model(name string, fields []*polylang.Field) %}
 type {%s strcase.ToCamel(name) %} struct {
 	{%- for _, field := range fields -%}
-	{%s strcase.ToCamel(field.Name) %} {% if field.Optional %}*{%- endif -%}{%s field.Type %} `json:"{%s field.Name %}"`
+	{%s strcase.ToCamel(field.Name) %} {% if field.Optional %}*{%- endif -%}{%s field.Type %}{% stripspace %}
+	`json:"{%s field.Name %}{% if field.Optional %},omitempty{% endif %}"`{% endstripspace %}
 	{%- endfor -%}
 }
 {% endfunc %}
