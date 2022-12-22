@@ -16,10 +16,10 @@ func ParseInput(v any) []any {
 		return nil
 	}
 
-	res := make([]any, 0, e.NumField())
+	res := make([]any, e.NumField())
 
 	for i := 0; i < e.NumField(); i++ {
-		res = append(res, e.Field(i).Interface())
+		res[i] = e.Field(i).Interface()
 
 	}
 
