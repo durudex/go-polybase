@@ -12,7 +12,7 @@ on:
       - '**'
 
 jobs:
-  go-lint:
+  go-test:
     runs-on: ubuntu-latest
     steps:
       - name: Install Go
