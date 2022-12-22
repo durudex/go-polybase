@@ -223,7 +223,7 @@ func TestExpression(t *testing.T) {
 	switch {
 	case got.Left != "this.id":
 		t.Fatal("error: expression left does not match")
-	case got.Operator != "=":
+	case got.Operator != polylang.NotEqual:
 		t.Fatal("error: expression operator does not match")
 	case got.Right != "id":
 		t.Fatal("error: expression right does not match")

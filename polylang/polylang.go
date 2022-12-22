@@ -91,7 +91,7 @@ type Expression struct {
 	Pos lexer.Position
 
 	Left       string      `parser:"@( Ident | String )"`
-	Operator   string      `parser:"( @( '=' '=' | '!' '=' | '=' ) )?"`
+	Operator   Operator    `parser:"( @@ )?"`
 	Expression *Expression `parser:"( '(' @@ ')' )?"`
 	Right      string      `parser:"( @( Ident | String ) )?"`
 }
