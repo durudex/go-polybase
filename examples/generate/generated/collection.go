@@ -10,10 +10,10 @@ import (
 
 type Collection struct {
 	Id                string  `json:"id"`
-	Name              *string `json:"name"`
-	LastRecordUpdated *string `json:"lastRecordUpdated"`
-	Code              *string `json:"code"`
-	PublicKey         *string `json:"publicKey"`
+	Name              *string `json:"name,omitempty"`
+	LastRecordUpdated *string `json:"lastRecordUpdated,omitempty"`
+	Code              *string `json:"code,omitempty"`
+	PublicKey         *string `json:"publicKey,omitempty"`
 }
 type ICollection interface {
 	Constructor(ctx context.Context, input *CollectionConstructorInput) (*polybase.SingleResponse[Collection], error)

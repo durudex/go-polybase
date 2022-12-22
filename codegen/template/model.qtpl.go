@@ -34,10 +34,13 @@ type `)
 			qw422016.N().S(`*`)
 		}
 		qw422016.E().S(field.Type)
-		qw422016.N().S(` `)
+		qw422016.N().S(``)
 		qw422016.N().S("`")
 		qw422016.N().S(`json:"`)
 		qw422016.E().S(field.Name)
+		if field.Optional {
+			qw422016.N().S(`,omitempty`)
+		}
 		qw422016.N().S(`"`)
 		qw422016.N().S("`")
 		qw422016.N().S(`

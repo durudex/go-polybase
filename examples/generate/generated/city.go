@@ -11,7 +11,7 @@ import (
 type City struct {
 	Id      string  `json:"id"`
 	Name    string  `json:"name"`
-	Country *string `json:"country"`
+	Country *string `json:"country,omitempty"`
 }
 type ICity interface {
 	Constructor(ctx context.Context, input *CityConstructorInput) (*polybase.SingleResponse[City], error)
