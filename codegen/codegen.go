@@ -60,34 +60,57 @@ func New(filename string) (Codegen, error) {
 }
 
 func (c *codegen) Generate() error {
-	for _, id := range c.config.Collections {
+	names := make([]string, len(c.config.Collections))
+
+	if err := c.checkDir(); err != nil {
+		return err
+	}
+
+	for i, id := range c.config.Collections {
 		ast, err := c.astCollection(context.Background(), id)
 		if err != nil {
 			return err
 		}
 
-		if err := c.generateFile(c.parseAst(id, ast)); err != nil {
+		parsed := c.parseAst(ast)
+		parsed.ID = id
+
+		names[i] = parsed.Name
+
+		if err := c.generateFile(parsed); err != nil {
 			return err
 		}
 	}
 
-	return nil
-}
-
-func (c *codegen) generateFile(coll *ParsedCollection) error {
-	if err := c.checkDir(); err != nil {
+	if err := c.generateClient(names); err != nil {
 		return err
 	}
 
-	path := c.config.Directory + "/" + strcase.ToSnake(coll.Name) + ".go"
+	return c.fmt()
+}
 
-	f, err := os.Create(path)
+func (c *codegen) generateClient(names []string) error {
+	f, err := os.Create(c.config.Directory + "/client.go")
 	if err != nil {
 		return err
 	}
 	defer f.Close()
 
 	template.WriteHeader(f, c.config.Package)
+	template.WriteClient(f, names)
+
+	return nil
+}
+
+func (c *codegen) generateFile(coll *ParsedCollection) error {
+	f, err := os.Create(c.config.Directory + "/" + strcase.ToSnake(coll.Name) + ".go")
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	template.WriteHeader(f, c.config.Package)
+	template.WriteImport(f)
 	template.WriteModel(f, coll.Name, coll.Fields)
 	template.WriteCollection(f, coll.ID, coll.Name, coll.Functions)
 
@@ -96,7 +119,7 @@ func (c *codegen) generateFile(coll *ParsedCollection) error {
 		template.WriteFunction(f, coll.Name, fc)
 	}
 
-	return c.fmt()
+	return nil
 }
 
 func (c *codegen) fmt() error {
@@ -135,9 +158,8 @@ func (c *codegen) astCollection(ctx context.Context, id string) (*polylang.Colle
 	return parser.ParseString("", response.Data.Code)
 }
 
-func (c *codegen) parseAst(id string, ast *polylang.Collection) *ParsedCollection {
+func (c *codegen) parseAst(ast *polylang.Collection) *ParsedCollection {
 	collection := &ParsedCollection{
-		ID:        id,
 		Name:      ast.Name,
 		Fields:    make([]*polylang.Field, 0),
 		Functions: make([]*polylang.Function, 0),
