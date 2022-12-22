@@ -20,12 +20,6 @@ func StreamHeader(qw422016 *qt422016.Writer, name string) {
 package `)
 	qw422016.E().S(name)
 	qw422016.N().S(`
-
-import (
-    "context"
-
-    "github.com/v1def/go-polybase"
-)
 `)
 }
 
@@ -38,6 +32,29 @@ func WriteHeader(qq422016 qtio422016.Writer, name string) {
 func Header(name string) string {
 	qb422016 := qt422016.AcquireByteBuffer()
 	WriteHeader(qb422016, name)
+	qs422016 := string(qb422016.B)
+	qt422016.ReleaseByteBuffer(qb422016)
+	return qs422016
+}
+
+func StreamImport(qw422016 *qt422016.Writer) {
+	qw422016.N().S(`import (
+    "context"
+
+    "github.com/v1def/go-polybase"
+)
+`)
+}
+
+func WriteImport(qq422016 qtio422016.Writer) {
+	qw422016 := qt422016.AcquireWriter(qq422016)
+	StreamImport(qw422016)
+	qt422016.ReleaseWriter(qw422016)
+}
+
+func Import() string {
+	qb422016 := qt422016.AcquireByteBuffer()
+	WriteImport(qb422016)
 	qs422016 := string(qb422016.B)
 	qt422016.ReleaseByteBuffer(qb422016)
 	return qs422016

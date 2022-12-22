@@ -4,5 +4,10 @@ use (
 	.
 	./cmd/polybase-gen
 	./codegen
+	./examples/call
+	./examples/create
+	./examples/generate
+	./examples/multiple
+	./examples/single
 	./polylang
 )
