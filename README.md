@@ -13,11 +13,12 @@ go install github.com/v1def/go-polybase/cmd/polybase-gen@latest
 ```
 
 ## Todo
-- [ ] Full support for Polybase capabilities. (80%)
-- [ ] Schema API Generation. (50%)
+- [ ] Full support for Polybase capabilities. (90%)
+- [ ] Schema API Generation. (90%)
 - [ ] Polybase CLI.
-- [ ] Polylang parser. (80%)
+- [ ] Polylang parser. (90%)
 - [ ] Logging.
+- [ ] Multi-language API generation (Go/JS/Dart)
 
 ## ⚠️ License
 
