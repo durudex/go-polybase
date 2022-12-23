@@ -37,9 +37,13 @@ type `)
 		qw422016.N().S(` `)
 		qw422016.E().S(param.Type)
 		qw422016.N().S(` `)
+		qw422016.N().S(``)
 		qw422016.N().S("`")
 		qw422016.N().S(`json:"`)
 		qw422016.E().S(param.Name)
+		if param.Optional {
+			qw422016.N().S(`,omitempty`)
+		}
 		qw422016.N().S(`"`)
 		qw422016.N().S("`")
 		qw422016.N().S(`

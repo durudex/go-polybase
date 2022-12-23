@@ -15,6 +15,7 @@ type Collection struct {
 	Code              *string `json:"code,omitempty"`
 	PublicKey         *string `json:"publicKey,omitempty"`
 }
+
 type ICollection interface {
 	Constructor(ctx context.Context, input *CollectionConstructorInput) (*polybase.SingleResponse[Collection], error)
 	UpdateCode(ctx context.Context, id string, input *CollectionUpdateCodeInput) (*polybase.SingleResponse[Collection], error)

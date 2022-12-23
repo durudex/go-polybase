@@ -4,7 +4,7 @@
 	"github.com/iancoleman/strcase"
 ) %}
 
-{%- func Collection(id, coll string, funcs []*polylang.Function) -%}
+{% func Collection(id, coll string, funcs []*polylang.Function) %}
 type I{%s strcase.ToCamel(coll) %} interface {
 	{%- for _, fc := range funcs -%}
 	{%s strcase.ToCamel(fc.Name) %}(ctx context.Context {% stripspace %}
