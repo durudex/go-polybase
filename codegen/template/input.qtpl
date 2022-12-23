@@ -7,7 +7,8 @@
 {% func Input(coll, name string, params []*polylang.Parameter) %}
 type {%s strcase.ToCamel(coll) %}{%s strcase.ToCamel(name) %}Input struct {
 	{%- for _, param := range params -%}
-	{%s strcase.ToCamel(param.Name) %} {% if param.Optional %}*{% endif %} {%s param.Type %} `json:"{%s param.Name %}"`
+	{%s strcase.ToCamel(param.Name) %} {% if param.Optional %}*{% endif %} {%s param.Type %} {% stripspace %}
+	`json:"{%s param.Name %}{% if param.Optional %},omitempty{% endif %}"`{% endstripspace %}
 	{%- endfor -%}
 }
 {% endfunc %}

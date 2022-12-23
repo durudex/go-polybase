@@ -21,7 +21,8 @@ var (
 )
 
 func StreamCollection(qw422016 *qt422016.Writer, id, coll string, funcs []*polylang.Function) {
-	qw422016.N().S(`type I`)
+	qw422016.N().S(`
+type I`)
 	qw422016.E().S(strcase.ToCamel(coll))
 	qw422016.N().S(` interface {
 `)
