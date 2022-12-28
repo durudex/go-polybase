@@ -29,15 +29,6 @@ type Config struct {
 	DefaultNamespace string
 }
 
-// Record structure stores the record that is returned in the Polybase response.
-type Record[T any] struct {
-	// Block field stores block data from the blockchain.
-	Block Block `json:"block"`
-
-	// Data field stores data with the specified type.
-	Data T `json:"data"`
-}
-
 // Block structure stores data about a block from the blockchain.
 type Block struct {
 	// The hash field stores the hash of a block from the blockchain.
@@ -67,5 +58,5 @@ func (p *polybase) Collection(name string) Collection {
 		name = p.cfg.DefaultNamespace + "/" + name
 	}
 
-	return NewCollection(name, p.client)
+	return newCollection(name, p.client)
 }
