@@ -14,8 +14,9 @@ import (
 )
 
 type Collection interface {
-	Record(id string) Option
-	Get(ctx context.Context, v any, params ...string) error
+	Query
+
+	Record(id string) RecordDoer
 	Create(ctx context.Context, args []any, v any) error
 }
 
@@ -24,21 +25,44 @@ type collection struct {
 	client Client
 }
 
-func NewCollection(name string, client Client) Collection {
+func newCollection(name string, client Client) Collection {
 	return &collection{name: url.QueryEscape(name), client: client}
 }
 
-func (c *collection) Record(id string) Option {
-	return NewOption(c.client, fmt.Sprintf("/collections/%s/records/%s", c.name, url.QueryEscape(id)))
-}
-
-func (c *collection) Get(ctx context.Context, v any, params ...string) error {
+func (c *collection) Get(ctx context.Context, resp any) error {
 	req := &Request{
-		Endpoint: fmt.Sprintf("/collections/%s/records", c.name) + buildParam(params),
+		Endpoint: fmt.Sprintf("/collections/%s/records", c.name),
 		Method:   "GET",
 	}
 
-	return c.client.MakeRequest(ctx, req, v)
+	return c.client.MakeRequest(ctx, req, resp)
+}
+
+func (c *collection) Before(cursor string) Query {
+	return newQuery(c.client, fmt.Sprintf("/collections/%s/records", c.name)).Before(cursor)
+}
+
+func (c *collection) After(cursor string) Query {
+	return newQuery(c.client, fmt.Sprintf("/collections/%s/records", c.name)).After(cursor)
+}
+
+func (c *collection) Limit(num int) Query {
+	return newQuery(c.client, fmt.Sprintf("/collections/%s/records", c.name)).Limit(num)
+}
+
+func (c *collection) Sort(field string, direction ...string) Query {
+	return newQuery(c.client,
+		fmt.Sprintf("/collections/%s/records", c.name)).Sort(field, direction...)
+}
+
+func (c collection) Where(field string, op WhereOperator, value any) Query {
+	return newQuery(c.client,
+		fmt.Sprintf("/collections/%s/records", c.name)).Where(field, op, value)
+}
+
+func (c *collection) Record(id string) RecordDoer {
+	return newRecordDoer(c.client,
+		fmt.Sprintf("/collections/%s/records/%s", c.name, url.QueryEscape(id)))
 }
 
 func (c *collection) Create(ctx context.Context, args []any, v any) error {

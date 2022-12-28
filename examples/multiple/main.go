@@ -31,7 +31,7 @@ func main() {
 	fmt.Println("Before Cursor", response.Cursor.Before)
 
 	for _, data := range response.Data {
-		fmt.Println("Block Hash: ", data.Block.Hash)
+		fmt.Println("Block Hash:", data.Block.Hash)
 		fmt.Println("ID:", data.Data.ID)
 		fmt.Println("Code:", data.Data.Code)
 	}
