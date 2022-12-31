@@ -1,3 +1,3 @@
-module github.com/v1def/go-polybase/examples/create
+module github.com/durudex/go-polybase/examples/create
 
 go 1.19

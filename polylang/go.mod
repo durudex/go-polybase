@@ -1,4 +1,4 @@
-module github.com/v1def/go-polybase/polylang
+module github.com/durudex/go-polybase/polylang
 
 go 1.19
 
