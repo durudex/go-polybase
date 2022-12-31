@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 V1def
+ * Copyright © 2022 Durudex
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -10,7 +10,7 @@ package main
 import (
 	"os"
 
-	"github.com/v1def/go-polybase/codegen"
+	"github.com/durudex/go-polybase/codegen"
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"

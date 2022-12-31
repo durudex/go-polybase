@@ -1,3 +1,3 @@
-module github.com/v1def/go-polybase/examples/single
+module github.com/durudex/go-polybase/examples/single
 
 go 1.19

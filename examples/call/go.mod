@@ -1,3 +1,3 @@
-module github.com/v1def/go-polybase/examples/call
+module github.com/durudex/go-polybase/examples/call
 
 go 1.19

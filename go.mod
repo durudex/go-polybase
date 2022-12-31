@@ -1,3 +1,3 @@
-module github.com/v1def/go-polybase
+module github.com/durudex/go-polybase
 
 go 1.19

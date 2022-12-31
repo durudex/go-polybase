@@ -1,4 +1,4 @@
-module github.com/v1def/go-polybase/cmd/polybase-gen
+module github.com/durudex/go-polybase/cmd/polybase-gen
 
 go 1.19
 

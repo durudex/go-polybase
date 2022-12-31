@@ -18,7 +18,7 @@ var (
 
 func StreamClient(qw422016 *qt422016.Writer, names []string) {
 	qw422016.N().S(`
-import "github.com/v1def/go-polybase"
+import "github.com/durudex/go-polybase"
 
 type Client struct {
 `)

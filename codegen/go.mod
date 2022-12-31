@@ -1,4 +1,4 @@
-module github.com/v1def/go-polybase/codegen
+module github.com/durudex/go-polybase/codegen
 
 go 1.19
 

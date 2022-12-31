@@ -1,7 +1,7 @@
 {% import "github.com/iancoleman/strcase" %}
 
 {% func Client(names []string) %}
-import "github.com/v1def/go-polybase"
+import "github.com/durudex/go-polybase"
 
 type Client struct {
 	{%- for _, name := range names -%}

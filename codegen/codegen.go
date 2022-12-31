@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 V1def
+ * Copyright © 2022 Durudex
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -13,9 +13,9 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	"github.com/v1def/go-polybase"
-	"github.com/v1def/go-polybase/codegen/template"
-	"github.com/v1def/go-polybase/polylang"
+	"github.com/durudex/go-polybase"
+	"github.com/durudex/go-polybase/codegen/template"
+	"github.com/durudex/go-polybase/polylang"
 
 	"github.com/alecthomas/participle/v2"
 	"github.com/iancoleman/strcase"

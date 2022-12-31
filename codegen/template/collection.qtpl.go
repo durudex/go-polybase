@@ -4,7 +4,7 @@
 package template
 
 import (
-	"github.com/v1def/go-polybase/polylang"
+	"github.com/durudex/go-polybase/polylang"
 
 	"github.com/iancoleman/strcase"
 )
