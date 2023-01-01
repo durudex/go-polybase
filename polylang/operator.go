@@ -46,7 +46,7 @@ var (
 		Not: "!", BitNot: "~", Exponent: "**", Multiply: "*", Divide: "/", Modulo: "%",
 		Add: "+", Subtract: "-", ShiftLeft: "<<", ShiftRight: ">>", BitAnd: "&", BitXor: "^",
 		BitOr: "|", LessThan: "<", GreaterThan: ">", LessThanOrEqual: "<=", GreaterThanOrEqual: ">=",
-		Equal: "==", NotEqual: "!=", And: "&&", Or: "|", AssignSub: "-=", AssignAdd: "+=", Assign: "=",
+		Equal: "==", NotEqual: "!=", And: "&&", Or: "||", AssignSub: "-=", AssignAdd: "+=", Assign: "=",
 	}
 	stringToOperator = map[string]Operator{
 		"!": Not, "~": BitNot, "**": Exponent, "*": Multiply, "/": Divide, "%": Modulo,
