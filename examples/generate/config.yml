@@ -1,7 +1,0 @@
-collection:
-  - "Collection"
-  - "V-City/City"
-
-package: "generated"
-
-directory: "generated"

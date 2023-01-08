@@ -1,5 +1,0 @@
-if (this.id == id) {
-    this.name = name;
-} else {
-    this.name = id;
-}
