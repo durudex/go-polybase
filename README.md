@@ -15,12 +15,12 @@ import (
     "github.com/durudex/go-polybase"
 )
 
-type Model struct{}
+type Model struct { ... }
 
 func main() {
-	db := polybase.New(polybase.Config{
+    db := polybase.New(polybase.Config{
         URL: polybase.TestnetURL,
-	})
+    })
     coll := db.Collection("Collection")
 
     var response polybase.SingleResponse[Model]
@@ -32,6 +32,11 @@ func main() {
 ```
 
 > More usage examples can be found in [examples](examples/).
+
+## PolyGen
+
+For easy and fast development, you can generate code to interact with Polybase collections
+using [PolyGen](https://github.com/durudex/polygen).
 
 ## ⚠️ License
 
