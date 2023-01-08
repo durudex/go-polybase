@@ -1,7 +1,0 @@
-constructor (id: string, name?: string) {
-    this.id = id;
-
-    if (this.name != name) {
-        this.name = name;
-    }
-}
