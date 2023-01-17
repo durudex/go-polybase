@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 Durudex
+ * Copyright © 2022-2023 Durudex
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -42,37 +42,50 @@ type SingleResponse[T any] struct {
 }
 
 type client struct {
-	url  string
+	cfg  Config
 	doer *http.Client
 }
 
-func NewClient(url string) Client {
-	// TODO: add custom client
-	return &client{url: url, doer: http.DefaultClient}
+func NewClient(cfg Config) Client {
+	return &client{cfg: cfg, doer: http.DefaultClient}
 }
 
 func (c *client) MakeRequest(ctx context.Context, req *Request, resp any) error {
-	var body io.Reader
-
-	if req.Body.Args != nil {
-		b, err := json.Marshal(req.Body)
-		if err != nil {
-			return err
-		}
-
-		body = bytes.NewReader(b)
-	}
-
-	rc, err := http.NewRequestWithContext(ctx, req.Method, c.url+req.Endpoint, body)
+	rwc, err := c.newRequest(ctx, req)
 	if err != nil {
 		return err
 	}
 
-	re, err := c.doer.Do(rc)
+	re, err := c.doer.Do(rwc)
 	if err != nil {
 		return err
 	}
 	defer re.Body.Close()
 
 	return json.NewDecoder(re.Body).Decode(resp)
+}
+
+func (c *client) newRequest(ctx context.Context, req *Request) (*http.Request, error) {
+	var body io.Reader
+
+	if req.Body.Args != nil {
+		b, err := json.Marshal(req.Body)
+		if err != nil {
+			return nil, err
+		}
+
+		body = bytes.NewReader(b)
+	}
+
+	url := c.cfg.URL + req.Endpoint
+
+	rwc, err := http.NewRequestWithContext(ctx, req.Method, url, body)
+	if err != nil {
+		return nil, err
+	}
+
+	name := "durudex/go-polybase:" + c.cfg.Name
+	rwc.Header.Add("X-Polybase-Client", name)
+
+	return rwc, nil
 }

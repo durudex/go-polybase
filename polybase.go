@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 Durudex
+ * Copyright © 2022-2023 Durudex
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -19,16 +19,6 @@ type Polybase interface {
 	Collection(name string) Collection
 }
 
-// Config structure stores the configuration for interacting with Polybase database.
-type Config struct {
-	// URL field stores the URL address to which the Polybase client will be connected.
-	URL string
-
-	// DefaultNamespace field stores the namespace used in the Polybase.Collection method as
-	// a name prefix.
-	DefaultNamespace string
-}
-
 // Block structure stores data about a block from the blockchain.
 type Block struct {
 	// The hash field stores the hash of a block from the blockchain.
@@ -43,7 +33,9 @@ type Cursor struct {
 
 // New function returns a new Polybase client.
 func New(cfg Config) Polybase {
-	return &polybase{client: NewClient(cfg.URL), cfg: cfg}
+	cfg.configure()
+
+	return &polybase{client: NewClient(cfg), cfg: cfg}
 }
 
 // polybase structure implements all methods of the Polybase interface.
