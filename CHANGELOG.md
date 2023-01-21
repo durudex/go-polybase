@@ -6,6 +6,10 @@
 
 - Added client name option to config.
 
+### Changed
+
+- Allowed usage nil value in response.
+
 ## [v0.0.1] - 2023-01-10
 
 ### Added
