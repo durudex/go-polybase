@@ -83,6 +83,10 @@ func (c *client) MakeRequest(ctx context.Context, req *Request, resp any) error 
 	}
 	defer re.Body.Close()
 
+	if resp == nil {
+		return nil
+	}
+
 	// Decoding the JSON returned response.
 	return json.NewDecoder(re.Body).Decode(resp)
 }

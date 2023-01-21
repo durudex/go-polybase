@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 Durudex
+ * Copyright © 2022-2023 Durudex
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -17,7 +17,7 @@ type Collection interface {
 	Query
 
 	Record(id string) RecordDoer
-	Create(ctx context.Context, args []any, v any) error
+	Create(ctx context.Context, args []any, resp any) error
 }
 
 type collection struct {
@@ -65,12 +65,12 @@ func (c *collection) Record(id string) RecordDoer {
 		fmt.Sprintf("/collections/%s/records/%s", c.name, url.QueryEscape(id)))
 }
 
-func (c *collection) Create(ctx context.Context, args []any, v any) error {
+func (c *collection) Create(ctx context.Context, args []any, resp any) error {
 	req := &Request{
 		Endpoint: fmt.Sprintf("/collections/%s/records", c.name),
 		Method:   "POST",
 		Body:     Body{Args: args},
 	}
 
-	return c.client.MakeRequest(ctx, req, v)
+	return c.client.MakeRequest(ctx, req, resp)
 }

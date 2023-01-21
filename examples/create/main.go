@@ -16,10 +16,9 @@ import (
 )
 
 type Todo struct {
-	ID        string `json:"id"`
-	Title     string `json:"title"`
-	Content   string `json:"content"`
-	Completed bool   `json:"completed"`
+	ID      string `json:"id"`
+	Title   string `json:"title"`
+	Content string `json:"content"`
 }
 
 func main() {
@@ -33,5 +32,4 @@ func main() {
 	fmt.Println("ID:", response.Data.ID)
 	fmt.Println("Title:", response.Data.Title)
 	fmt.Println("Content:", response.Data.Content)
-	fmt.Println("Completed:", response.Data.Completed)
 }
