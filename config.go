@@ -14,10 +14,14 @@ type Config struct {
 
 	// Name field stores the name of the client, which will be transmitted via the
 	// X-Polybase-Client HTTP header.
+	//
+	// Optional. Default value "default".
 	Name string
 
 	// DefaultNamespace field stores the namespace used in the Polybase.Collection method as
 	// a name prefix.
+	//
+	// Optional.
 	DefaultNamespace string
 }
 
