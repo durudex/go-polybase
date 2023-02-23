@@ -37,7 +37,7 @@ func main() {
 }
 ```
 
-> More usage examples can be found in the [examples directory](../examples/README.md).
+> More usage examples can be found in the [examples directory](https://github.com/durudex/go-polybase/blob/main/examples/README.md).
 
 ## PolyGen
 
