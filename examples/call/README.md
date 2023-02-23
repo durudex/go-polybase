@@ -1,6 +1,6 @@
 # Call Function
 
-This example shows an example of calling a Polybase collection function and getting the final state of a record.
+This example shows how to call a Polybase collection function and get the final state of a record.
 
 **A command to run the example:**
 
