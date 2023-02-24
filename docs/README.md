@@ -1,5 +1,7 @@
 # `go-polybase`
 
+Implementation of the Polybase database client on Go.
+
 ## Setup
 
 To get the [`go-polybase`](https://github.com/durudex/go-polybase) module, you need to have or install Go version >= [1.18](https://go.dev/dl/). To check your current version of Go, use the `go version` command.
