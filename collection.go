@@ -34,6 +34,8 @@ func NewCollection[T any](client Client, name string) Collection[T] {
 }
 
 func (c *collection[T]) Get(ctx context.Context) *Response[T] {
+	defer recoverFunc(ctx, c.client.Config().RecoverHandler)
+
 	req := &Request{
 		Endpoint: fmt.Sprintf("/collections/%s/records", c.name),
 		Method:   "GET",
@@ -79,6 +81,8 @@ func (c *collection[T]) Record(id string) RecordDoer[T] {
 }
 
 func (c *collection[T]) Create(ctx context.Context, args []any) *SingleResponse[T] {
+	defer recoverFunc(ctx, c.client.Config().RecoverHandler)
+
 	req := &Request{
 		Endpoint: fmt.Sprintf("/collections/%s/records", c.name),
 		Method:   "POST",

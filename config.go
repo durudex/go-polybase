@@ -23,10 +23,15 @@ type Config struct {
 	//
 	// Optional.
 	DefaultNamespace string
+
+	RecoverHandler RecoverHandler
 }
 
 func (c *Config) configure() {
 	if c.Name == "" {
 		c.Name = "default"
+	}
+	if c.RecoverHandler == nil {
+		c.RecoverHandler = DefaultRecover
 	}
 }

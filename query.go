@@ -45,6 +45,8 @@ func newQuery[T any](client Client, endpoint string) Query[T] {
 }
 
 func (q *query[T]) Get(ctx context.Context) *Response[T] {
+	defer recoverFunc(ctx, q.client.Config().RecoverHandler)
+
 	req := &Request{
 		Endpoint: q.endpoint + q.build(),
 		Method:   "GET",

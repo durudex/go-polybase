@@ -48,6 +48,8 @@ func newRecordDoer[T any](client Client, endpoint string) RecordDoer[T] {
 // Get method sends a request to getting collection record by the specified ID and decodes
 // the returned value.
 func (r recordDoer[T]) Get(ctx context.Context) *SingleResponse[T] {
+	defer recoverFunc(ctx, r.client.Config().RecoverHandler)
+
 	req := &Request{
 		Endpoint: r.endpoint,
 		Method:   "GET",
@@ -65,6 +67,8 @@ func (r recordDoer[T]) Get(ctx context.Context) *SingleResponse[T] {
 // Call method calls a function from the Polybase collection scheme with the specified arguments.
 // To make it easier to pass arguments, you can pass a structure using the ParseInput function.
 func (r recordDoer[T]) Call(ctx context.Context, fc string, args []any) *SingleResponse[T] {
+	defer recoverFunc(ctx, r.client.Config().RecoverHandler)
+
 	req := &Request{
 		Endpoint: r.endpoint + fmt.Sprintf("/call/%s", url.QueryEscape(fc)),
 		Method:   "POST",

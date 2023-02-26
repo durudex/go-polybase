@@ -5,6 +5,7 @@
 ### Added
 
 - Added client name option to config.
+- Added recover handler option to config.
 
 ### Changed
 
