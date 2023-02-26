@@ -10,6 +10,7 @@ package polybase
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"net/url"
 )
 
@@ -52,7 +53,7 @@ func (r recordDoer[T]) Get(ctx context.Context) *SingleResponse[T] {
 
 	req := &Request{
 		Endpoint: r.endpoint,
-		Method:   "GET",
+		Method:   http.MethodGet,
 	}
 
 	var resp SingleResponse[T]
@@ -71,7 +72,7 @@ func (r recordDoer[T]) Call(ctx context.Context, fc string, args []any) *SingleR
 
 	req := &Request{
 		Endpoint: r.endpoint + fmt.Sprintf("/call/%s", url.QueryEscape(fc)),
-		Method:   "POST",
+		Method:   http.MethodPost,
 		Body:     Body{Args: args},
 	}
 

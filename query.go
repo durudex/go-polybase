@@ -11,6 +11,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
 )
 
 type WhereOperator string
@@ -49,7 +50,7 @@ func (q *query[T]) Get(ctx context.Context) *Response[T] {
 
 	req := &Request{
 		Endpoint: q.endpoint + q.build(),
-		Method:   "GET",
+		Method:   http.MethodGet,
 	}
 
 	var resp Response[T]

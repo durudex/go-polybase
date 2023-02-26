@@ -10,6 +10,7 @@ package polybase
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"net/url"
 )
 
@@ -38,7 +39,7 @@ func (c *collection[T]) Get(ctx context.Context) *Response[T] {
 
 	req := &Request{
 		Endpoint: fmt.Sprintf("/collections/%s/records", c.name),
-		Method:   "GET",
+		Method:   http.MethodGet,
 	}
 
 	var resp Response[T]
@@ -85,7 +86,7 @@ func (c *collection[T]) Create(ctx context.Context, args []any) *SingleResponse[
 
 	req := &Request{
 		Endpoint: fmt.Sprintf("/collections/%s/records", c.name),
-		Method:   "POST",
+		Method:   http.MethodPost,
 		Body:     Body{Args: args},
 	}
 
