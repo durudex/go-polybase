@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 Durudex
+ * Copyright © 2022-2023 Durudex
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -23,47 +23,55 @@ type Record[T any] struct {
 }
 
 // RecordDoer interface stores methods for interacting with the specified Polybase record.
-type RecordDoer interface {
+type RecordDoer[T any] interface {
 	// Get method sends a request to getting collection record by the specified ID and decodes
 	// the returned value.
-	Get(ctx context.Context, resp any) error
+	Get(ctx context.Context) *SingleResponse[T]
 
 	// Call method calls a function from the Polybase collection scheme with the specified
 	// arguments. To make it easier to pass arguments, you can pass a structure using the
 	// ParseInput function.
-	Call(ctx context.Context, fc string, args []any, resp any) error
+	Call(ctx context.Context, fc string, args []any) *SingleResponse[T]
 }
 
 // recordDoer structure implements all methods of the RecordDoer interface.
-type recordDoer struct {
+type recordDoer[T any] struct {
 	client   Client
 	endpoint string
 }
 
 // newRecordDoer function returns a new record doer.
-func newRecordDoer(client Client, endpoint string) RecordDoer {
-	return recordDoer{client: client, endpoint: endpoint}
+func newRecordDoer[T any](client Client, endpoint string) RecordDoer[T] {
+	return recordDoer[T]{client: client, endpoint: endpoint}
 }
 
 // Get method sends a request to getting collection record by the specified ID and decodes
 // the returned value.
-func (r recordDoer) Get(ctx context.Context, resp any) error {
+func (r recordDoer[T]) Get(ctx context.Context) *SingleResponse[T] {
 	req := &Request{
 		Endpoint: r.endpoint,
 		Method:   "GET",
 	}
 
-	return r.client.MakeRequest(ctx, req, resp)
+	var resp SingleResponse[T]
+
+	r.client.MakeRequest(ctx, req, &resp)
+
+	return &resp
 }
 
 // Call method calls a function from the Polybase collection scheme with the specified arguments.
 // To make it easier to pass arguments, you can pass a structure using the ParseInput function.
-func (r recordDoer) Call(ctx context.Context, fc string, args []any, resp any) error {
+func (r recordDoer[T]) Call(ctx context.Context, fc string, args []any) *SingleResponse[T] {
 	req := &Request{
 		Endpoint: r.endpoint + fmt.Sprintf("/call/%s", url.QueryEscape(fc)),
 		Method:   "POST",
 		Body:     Body{Args: args},
 	}
 
-	return r.client.MakeRequest(ctx, req, resp)
+	var resp SingleResponse[T]
+
+	r.client.MakeRequest(ctx, req, &resp)
+
+	return &resp
 }

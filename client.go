@@ -29,6 +29,8 @@ type Client interface {
 	// MakeRequest method makes a request with the specified settings and decodes
 	// the JSON response.
 	MakeRequest(ctx context.Context, req *Request, resp any) error
+
+	Config() *Config
 }
 
 // Request structure stores data what used for creating a new HTTP request.
@@ -59,12 +61,12 @@ type SingleResponse[T any] struct {
 
 // client structure implements all methods of the Client interface.
 type client struct {
-	cfg  Config
+	cfg  *Config
 	doer *http.Client
 }
 
-// NewClient function returns a new Polybase client.
-func NewClient(cfg Config) Client {
+func New(cfg *Config) Client {
+	cfg.configure()
 	return &client{cfg: cfg, doer: http.DefaultClient}
 }
 
@@ -82,10 +84,6 @@ func (c *client) MakeRequest(ctx context.Context, req *Request, resp any) error 
 		return err
 	}
 	defer re.Body.Close()
-
-	if resp == nil {
-		return nil
-	}
 
 	// Decoding the JSON returned response.
 	return json.NewDecoder(re.Body).Decode(resp)
@@ -120,3 +118,5 @@ func (c *client) newRequest(ctx context.Context, req *Request) (*http.Request, e
 
 	return rwc, nil
 }
+
+func (c *client) Config() *Config { return c.cfg }

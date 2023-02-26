@@ -26,14 +26,12 @@ import (
 type Model struct { ... }
 
 func main() {
-    db := polybase.New(polybase.Config{
+    client := polybase.New(&polybase.Config{
         URL: polybase.TestnetURL,
     })
-    coll := db.Collection("Collection")
+    coll := polybase.NewCollection(client, "Collection")
 
-    var response polybase.SingleResponse[Model]
-
-    coll.Record("id").Get(context.Background(), &response)
+    response := coll.Record("id").Get(context.Background())
 
     ...
 }
@@ -43,8 +41,7 @@ func main() {
 
 ## PolyGen
 
-For easy and fast development, you can generate code to interact with Polybase collections
-using [PolyGen](https://github.com/durudex/polygen).
+For easy and fast development, you can generate code to interact with Polybase collections using [PolyGen](https://github.com/durudex/polygen).
 
 ## License
 

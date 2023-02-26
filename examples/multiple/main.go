@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 Durudex
+ * Copyright © 2022-2023 Durudex
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -20,12 +20,12 @@ type Collection struct {
 }
 
 func main() {
-	db := polybase.New(polybase.Config{URL: polybase.TestnetURL})
-	coll := db.Collection("polybase/todo")
+	client := polybase.New(&polybase.Config{
+		URL: polybase.TestnetURL,
+	})
+	coll := polybase.NewCollection[Collection](client, "Collection")
 
-	var response polybase.Response[Collection]
-
-	coll.Get(context.Background(), &response)
+	response := coll.Get(context.Background())
 
 	fmt.Println("After Cursor", response.Cursor.After)
 	fmt.Println("Before Cursor", response.Cursor.Before)

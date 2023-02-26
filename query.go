@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 Durudex
+ * Copyright © 2022-2023 Durudex
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -25,35 +25,39 @@ const (
 	Equal              WhereOperator = "$eq"
 )
 
-type Query interface {
-	Get(ctx context.Context, resp any) error
-	Before(cursor string) Query
-	After(cursor string) Query
-	Limit(num int) Query
-	Sort(field string, direction ...string) Query
-	Where(field string, op WhereOperator, value any) Query
+type Query[T any] interface {
+	Get(ctx context.Context) *Response[T]
+	Before(cursor string) Query[T]
+	After(cursor string) Query[T]
+	Limit(num int) Query[T]
+	Sort(field string, direction ...string) Query[T]
+	Where(field string, op WhereOperator, value any) Query[T]
 }
 
-type query struct {
+type query[T any] struct {
 	client   Client
 	endpoint string
 	param    map[string]any
 }
 
-func newQuery(client Client, endpoint string) Query {
-	return &query{client: client, endpoint: endpoint, param: make(map[string]any)}
+func newQuery[T any](client Client, endpoint string) Query[T] {
+	return &query[T]{client: client, endpoint: endpoint, param: make(map[string]any)}
 }
 
-func (q *query) Get(ctx context.Context, resp any) error {
+func (q *query[T]) Get(ctx context.Context) *Response[T] {
 	req := &Request{
 		Endpoint: q.endpoint + q.build(),
 		Method:   "GET",
 	}
 
-	return q.client.MakeRequest(ctx, req, resp)
+	var resp Response[T]
+
+	q.client.MakeRequest(ctx, req, &resp)
+
+	return &resp
 }
 
-func (q *query) build() string {
+func (q *query[T]) build() string {
 	res := "?"
 
 	for i, value := range q.param {
@@ -77,25 +81,25 @@ func (q *query) build() string {
 	return res
 }
 
-func (q *query) Before(cursor string) Query {
+func (q *query[T]) Before(cursor string) Query[T] {
 	q.param["before"] = cursor
 
 	return q
 }
 
-func (q *query) After(cursor string) Query {
+func (q *query[T]) After(cursor string) Query[T] {
 	q.param["after"] = cursor
 
 	return q
 }
 
-func (q *query) Limit(num int) Query {
+func (q *query[T]) Limit(num int) Query[T] {
 	q.param["limit"] = num
 
 	return q
 }
 
-func (q *query) Sort(field string, direction ...string) Query {
+func (q *query[T]) Sort(field string, direction ...string) Query[T] {
 	if direction == nil {
 		direction = append(direction, "asc")
 	}
@@ -109,7 +113,7 @@ func (q *query) Sort(field string, direction ...string) Query {
 	return q
 }
 
-func (q *query) Where(field string, op WhereOperator, value any) Query {
+func (q *query[T]) Where(field string, op WhereOperator, value any) Query[T] {
 	if _, ok := q.param["where"]; !ok {
 		q.param["where"] = make(map[string]any)
 	}
