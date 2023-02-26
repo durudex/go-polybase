@@ -55,7 +55,9 @@ func (r recordDoer[T]) Get(ctx context.Context) *SingleResponse[T] {
 
 	var resp SingleResponse[T]
 
-	r.client.MakeRequest(ctx, req, &resp)
+	if err := r.client.MakeRequest(ctx, req, &resp); err != nil {
+		panic("error getting record: " + err.Error())
+	}
 
 	return &resp
 }
@@ -71,7 +73,9 @@ func (r recordDoer[T]) Call(ctx context.Context, fc string, args []any) *SingleR
 
 	var resp SingleResponse[T]
 
-	r.client.MakeRequest(ctx, req, &resp)
+	if err := r.client.MakeRequest(ctx, req, &resp); err != nil {
+		panic("error call collection function: " + err.Error())
+	}
 
 	return &resp
 }

@@ -52,7 +52,9 @@ func (q *query[T]) Get(ctx context.Context) *Response[T] {
 
 	var resp Response[T]
 
-	q.client.MakeRequest(ctx, req, &resp)
+	if err := q.client.MakeRequest(ctx, req, &resp); err != nil {
+		panic("error getting collection records: " + err.Error())
+	}
 
 	return &resp
 }

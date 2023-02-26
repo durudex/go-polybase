@@ -41,7 +41,9 @@ func (c *collection[T]) Get(ctx context.Context) *Response[T] {
 
 	var resp Response[T]
 
-	c.client.MakeRequest(ctx, req, &resp)
+	if err := c.client.MakeRequest(ctx, req, &resp); err != nil {
+		panic("error getting collection records: " + err.Error())
+	}
 
 	return &resp
 }
@@ -85,7 +87,9 @@ func (c *collection[T]) Create(ctx context.Context, args []any) *SingleResponse[
 
 	var resp SingleResponse[T]
 
-	c.client.MakeRequest(ctx, req, &resp)
+	if err := c.client.MakeRequest(ctx, req, &resp); err != nil {
+		panic("error creating a new record: " + err.Error())
+	}
 
 	return &resp
 }
