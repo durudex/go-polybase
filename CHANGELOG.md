@@ -1,5 +1,11 @@
 # Change Log
 
+## [Unreleased]
+
+### Added
+
+- Added error codes constants.
+
 ## [v0.0.2] - 2023-02-28
 
 ### Added
