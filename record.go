@@ -30,8 +30,7 @@ type RecordDoer[T any] interface {
 	Get(ctx context.Context) *SingleResponse[T]
 
 	// Call method calls a function from the Polybase collection scheme with the specified
-	// arguments. To make it easier to pass arguments, you can pass a structure using the
-	// ParseInput function.
+	// arguments.
 	Call(ctx context.Context, fc string, args ...any) *SingleResponse[T]
 }
 
@@ -66,7 +65,6 @@ func (r recordDoer[T]) Get(ctx context.Context) *SingleResponse[T] {
 }
 
 // Call method calls a function from the Polybase collection scheme with the specified arguments.
-// To make it easier to pass arguments, you can pass a structure using the ParseInput function.
 func (r recordDoer[T]) Call(ctx context.Context, fc string, args ...any) *SingleResponse[T] {
 	defer recoverFunc(ctx, r.client.Config().RecoverHandler)
 
