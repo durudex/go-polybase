@@ -29,7 +29,7 @@ func main() {
     client := polybase.New(&polybase.Config{
         URL: polybase.TestnetURL,
     })
-    coll := polybase.NewCollection(client, "Collection")
+    coll := polybase.NewCollection[Model](client, "Collection")
 
     response := coll.Record("id").Get(context.Background())
 
