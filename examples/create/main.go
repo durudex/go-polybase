@@ -35,7 +35,7 @@ func main() {
 		Completed: 0,
 	}
 
-	response := coll.Create(context.Background(), polybase.ParseInput(input))
+	response := coll.Create(context.Background(), input)
 
 	fmt.Println("ID:", response.Data.ID)
 	fmt.Println("Title:", response.Data.Title)

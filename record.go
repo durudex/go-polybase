@@ -32,7 +32,7 @@ type RecordDoer[T any] interface {
 	// Call method calls a function from the Polybase collection scheme with the specified
 	// arguments. To make it easier to pass arguments, you can pass a structure using the
 	// ParseInput function.
-	Call(ctx context.Context, fc string, args []any) *SingleResponse[T]
+	Call(ctx context.Context, fc string, args ...any) *SingleResponse[T]
 }
 
 // recordDoer structure implements all methods of the RecordDoer interface.
@@ -67,13 +67,13 @@ func (r recordDoer[T]) Get(ctx context.Context) *SingleResponse[T] {
 
 // Call method calls a function from the Polybase collection scheme with the specified arguments.
 // To make it easier to pass arguments, you can pass a structure using the ParseInput function.
-func (r recordDoer[T]) Call(ctx context.Context, fc string, args []any) *SingleResponse[T] {
+func (r recordDoer[T]) Call(ctx context.Context, fc string, args ...any) *SingleResponse[T] {
 	defer recoverFunc(ctx, r.client.Config().RecoverHandler)
 
 	req := &Request{
 		Endpoint: r.endpoint + fmt.Sprintf("/call/%s", url.QueryEscape(fc)),
 		Method:   http.MethodPost,
-		Body:     Body{Args: args},
+		Body:     Body{Args: ParseInput(args)},
 	}
 
 	var resp SingleResponse[T]

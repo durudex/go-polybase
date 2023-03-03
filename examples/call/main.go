@@ -27,8 +27,10 @@ func main() {
 	})
 	coll := polybase.NewCollection[Todo](client, "polybase/todo")
 
+	args := []any{"1", "go-polybase", "example", 0}
+
 	response := coll.Record("1").
-		Call(context.Background(), "update", []any{"1", "go-polybase", "example", 0})
+		Call(context.Background(), "update", args)
 
 	fmt.Println("ID:", response.Data.ID)
 	fmt.Println("Title:", response.Data.Title)

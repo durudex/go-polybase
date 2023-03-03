@@ -18,7 +18,7 @@ type Collection[T any] interface {
 	Query[T]
 
 	Record(id string) RecordDoer[T]
-	Create(ctx context.Context, args []any) *SingleResponse[T]
+	Create(ctx context.Context, args ...any) *SingleResponse[T]
 }
 
 type collection[T any] struct {
@@ -81,13 +81,13 @@ func (c *collection[T]) Record(id string) RecordDoer[T] {
 		fmt.Sprintf("/collections/%s/records/%s", c.name, url.QueryEscape(id)))
 }
 
-func (c *collection[T]) Create(ctx context.Context, args []any) *SingleResponse[T] {
+func (c *collection[T]) Create(ctx context.Context, args ...any) *SingleResponse[T] {
 	defer recoverFunc(ctx, c.client.Config().RecoverHandler)
 
 	req := &Request{
 		Endpoint: fmt.Sprintf("/collections/%s/records", c.name),
 		Method:   http.MethodPost,
-		Body:     Body{Args: args},
+		Body:     Body{Args: ParseInput(args)},
 	}
 
 	var resp SingleResponse[T]

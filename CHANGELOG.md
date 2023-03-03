@@ -6,7 +6,11 @@
 
 - Added error codes constants.
 
-## [v0.0.2] - 2023-02-28
+### Changed
+
+- Changed the argument parsing function (ParseInput).
+
+## [0.0.2] - 2023-02-28
 
 ### Added
 
@@ -17,7 +21,7 @@
 
 - Changed getting the record state.
 
-## [v0.0.1] - 2023-01-10
+## [0.0.1] - 2023-01-10
 
 ### Added
 
