@@ -42,12 +42,12 @@ type recordDoer[T any] struct {
 
 // newRecordDoer function returns a new record doer.
 func newRecordDoer[T any](client Client, endpoint string) RecordDoer[T] {
-	return recordDoer[T]{client: client, endpoint: endpoint}
+	return &recordDoer[T]{client: client, endpoint: endpoint}
 }
 
 // Get method sends a request to getting collection record by the specified ID and decodes
 // the returned value.
-func (r recordDoer[T]) Get(ctx context.Context) *SingleResponse[T] {
+func (r *recordDoer[T]) Get(ctx context.Context) *SingleResponse[T] {
 	defer recoverFunc(ctx, r.client.Config().RecoverHandler)
 
 	req := &Request{
@@ -65,7 +65,7 @@ func (r recordDoer[T]) Get(ctx context.Context) *SingleResponse[T] {
 }
 
 // Call method calls a function from the Polybase collection scheme with the specified arguments.
-func (r recordDoer[T]) Call(ctx context.Context, fc string, args ...any) *SingleResponse[T] {
+func (r *recordDoer[T]) Call(ctx context.Context, fc string, args ...any) *SingleResponse[T] {
 	defer recoverFunc(ctx, r.client.Config().RecoverHandler)
 
 	req := &Request{

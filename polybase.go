@@ -7,8 +7,12 @@
 
 package polybase
 
-// TestnetURL constant stores the URL of the latest version of the Polybase testnet.
-const TestnetURL string = "https://testnet.polybase.xyz/v0"
+const (
+	DefaultURL = TestnetURL
+
+	// TestnetURL constant stores the URL of the latest version of the Polybase testnet.
+	TestnetURL = "https://testnet.polybase.xyz/v0"
+)
 
 // Block structure stores data about a block from the blockchain.
 type Block struct {

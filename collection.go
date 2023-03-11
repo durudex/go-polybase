@@ -71,7 +71,7 @@ func (c *collection[T]) Sort(field string, direction ...string) Query[T] {
 		fmt.Sprintf("/collections/%s/records", c.name)).Sort(field, direction...)
 }
 
-func (c collection[T]) Where(field string, op WhereOperator, value any) Query[T] {
+func (c *collection[T]) Where(field string, op WhereOperator, value any) Query[T] {
 	return newQuery[T](c.client,
 		fmt.Sprintf("/collections/%s/records", c.name)).Where(field, op, value)
 }
