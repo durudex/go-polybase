@@ -20,14 +20,13 @@
 
 ### Changed
 
-- Changed getting the record state.
+- Improved and simplified getting the status of records.
 
 ## [0.0.1] - 2023-01-10
 
 ### Added
 
-- Added getting single and multiple from collection response.
-- Added query parameters: before, after, limit, sort, where.
-- Added a method to create new records.
-- Added a utility for parsing the argument structure (ParseInput).
+- Added collection methods for creating and getting records.
+- Added before, after, limit, sort, and where filters for queries.
+- Added a utility for parsing the arguments (ParseInput).
 - Added HTTP client.
