@@ -12,7 +12,7 @@ import (
 	"log"
 )
 
-type RecoverHandler func(ctx context.Context, v any)
+type RecoverHandler = func(ctx context.Context, v any)
 
 func DefaultRecover(ctx context.Context, v any) { log.Fatalf("FATAL: %v", v) }
 

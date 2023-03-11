@@ -65,8 +65,17 @@ type client struct {
 	doer *http.Client
 }
 
-func New(cfg *Config) Client {
+func New(configs ...*Config) Client {
+	var cfg *Config
+
+	if configs != nil {
+		cfg = configs[0]
+	} else {
+		cfg = new(Config)
+	}
+
 	cfg.configure()
+
 	return &client{cfg: cfg, doer: http.DefaultClient}
 }
 

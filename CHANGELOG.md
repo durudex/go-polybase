@@ -8,7 +8,8 @@
 
 ### Changed
 
-- Changed the argument parsing function (ParseInput).
+- Parsing arguments becomes easier and more flexible.
+- Using the configuration is optional.
 
 ## [0.0.2] - 2023-02-28
 
