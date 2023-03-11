@@ -14,51 +14,59 @@ import (
 	"github.com/durudex/go-polybase"
 )
 
+type ParseInputMock struct {
+	String  string
+	Integer int
+	Boolean bool
+}
+
+var ParseInputTests = map[string]struct {
+	args []any
+	want []any
+}{
+	"Pointer Struct": {
+		args: []any{&ParseInputMock{"Hello Durudex", 1, true}},
+		want: []any{"Hello Durudex", 1, true},
+	},
+	"Struct": {
+		args: []any{ParseInputMock{"string", 1, true}},
+		want: []any{"string", 1, true},
+	},
+	"Struct Unsupported Type": {
+		args: []any{struct{ F float32 }{0.1}},
+		want: nil,
+	},
+	"Any Slice": {
+		args: []any{[]any{"string", 1, true}},
+		want: []any{"string", 1, true},
+	},
+	"String Slice": {
+		args: []any{[]string{"1", "2", "3"}},
+		want: []any{"1", "2", "3"},
+	},
+	"Multiple": {
+		args: []any{"string", 1, true},
+		want: []any{"string", 1, true},
+	},
+}
+
 func TestParseInput(t *testing.T) {
-	type Mock struct {
-		String  string
-		Integer int
-		Boolean bool
-	}
+	for name, test := range ParseInputTests {
+		t.Run(name, func(t *testing.T) {
+			got := polybase.ParseInput(test.args)
 
-	tests := []struct {
-		name string
-		args []any
-		want []any
-	}{
-		{
-			name: "Pointer Struct",
-			args: []any{&Mock{String: "string", Integer: 1, Boolean: true}},
-			want: []any{"string", 1, true},
-		},
-		{
-			name: "Struct",
-			args: []any{Mock{String: "string", Integer: 1, Boolean: true}},
-			want: []any{"string", 1, true},
-		},
-		{
-			name: "Any Slice",
-			args: []any{[]any{"string", 1, true}},
-			want: []any{"string", 1, true},
-		},
-		{
-			name: "String Slice",
-			args: []any{[]string{"1", "2", "3"}},
-			want: []any{"1", "2", "3"},
-		},
-		{
-			name: "Multiple",
-			args: []any{"string", 1, true},
-			want: []any{"string", 1, true},
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got := polybase.ParseInput(tt.args)
-
-			if !reflect.DeepEqual(got, tt.want) {
+			if !reflect.DeepEqual(got, test.want) {
 				t.Fatal("error: args does not match")
+			}
+		})
+	}
+}
+
+func BenchmarkParseInput(b *testing.B) {
+	for name, test := range ParseInputTests {
+		b.Run(name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				polybase.ParseInput(test.args)
 			}
 		})
 	}

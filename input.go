@@ -24,13 +24,11 @@ func ParseInput(args []any) []any {
 
 		switch val.Kind() {
 		case reflect.Array, reflect.Slice:
-			t := reflect.TypeOf(arg).Elem()
-
-			switch t.Kind() {
+			switch val.Type().Elem().Kind() {
 			case reflect.Interface:
 				res = append(res, arg.([]any)...)
 			default:
-				if !allowedKindTypes[t.Kind()] {
+				if !allowedKindTypes[val.Type().Elem().Kind()] {
 					continue
 				}
 
@@ -62,10 +60,10 @@ func ParseInput(args []any) []any {
 
 func parseIterableValue(v reflect.Value) []any {
 	n := v.Len()
-	res := make([]any, n)
+	res := make([]any, 0, n)
 
 	for i := 0; i < n; i++ {
-		res[i] = v.Index(i).Interface()
+		res = append(res, v.Index(i).Interface())
 	}
 
 	return res
@@ -73,7 +71,7 @@ func parseIterableValue(v reflect.Value) []any {
 
 func parseStructValue(v reflect.Value) []any {
 	n := v.NumField()
-	res := make([]any, n)
+	res := make([]any, 0, n)
 
 	for i := 0; i < n; i++ {
 		field := v.Field(i)
@@ -82,7 +80,7 @@ func parseStructValue(v reflect.Value) []any {
 			continue
 		}
 
-		res[i] = field.Interface()
+		res = append(res, field.Interface())
 	}
 
 	return res
