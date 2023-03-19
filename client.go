@@ -16,11 +16,13 @@ import (
 )
 
 const (
-	// ClientHeaderKey constant stores Polybase client HTTP request header.
+	// The ClientHeaderKey constant stores the value of the client key for an HTTP header.
 	ClientHeaderKey = "X-Polybase-Client"
 
-	// clientHeaderPrefix constant stores prefix for Polybase client HTTP request
-	// header value.
+	// The clientHeaderPrefix constant stores the value of the client prefix for an HTTP header.
+	// This value is added to the beginning of the client name specified in the configuration.
+	//
+	// Example: "durudex/go-polybase:default-name"
 	clientHeaderPrefix = "durudex/go-polybase:"
 )
 
@@ -65,6 +67,22 @@ type client struct {
 	doer *http.Client
 }
 
+// To start using the go-polybase client, you need to crete a new client instance. This can be
+// done using the internal New() function, which returns a new instance with either a specified
+// configuration or the default configuration.
+//
+// To create an instance with a specified configuration, you need to pass a pointer of Config
+// value as an argument to the New(...) function. This can be useful if you want to use specific
+// settings, for example, if you have your own configuration file.
+//
+//	client := polybase.New(&polybase.Config{
+//		...
+//	}
+//
+// If you want to use the default configuration, you can simply call the New() function without any
+// arguments. The client will be created with the default configuration set in the go-polybase module.
+//
+//	client := polybase.New()
 func New(configs ...*Config) Client {
 	var cfg *Config
 

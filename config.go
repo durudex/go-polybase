@@ -11,7 +11,9 @@ const DefaultName = "default"
 
 // Config structure stores the configuration for interacting with Polybase database.
 type Config struct {
-	// URL field stores the URL address to which the Polybase client will be connected.
+	// The URL field defines a url to a node or any other Polybase API gateway to which the
+	// client will send requests. You can use pre-defined internal url values or specify your
+	// own url values.
 	URL string `json:"url"`
 
 	// Name field stores the name of the client, which will be transmitted via the
