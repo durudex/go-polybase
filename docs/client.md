@@ -31,3 +31,24 @@ Each of the configuration options listed below is a field in the internal [`Conf
 ### [`Config.URL`](https://pkg.go.dev/github.com/durudex/go-polybase#Config.URL)
 
 The [`URL`](https://pkg.go.dev/github.com/durudex/go-polybase#Config.URL) field defines a url to a node or any other Polybase API gateway to which the client will send requests. You can use pre-defined internal url values or specify your own url values.
+
+**Internal values:**
+
+- [`DefaultURL`](https://pkg.go.dev/github.com/durudex/go-polybase#DefaultURL) (Default)
+- [`TestnetURL`](https://pkg.go.dev/github.com/durudex/go-polybase#TestnetURL)
+
+### [`Config.Name`](https://pkg.go.dev/github.com/durudex/go-polybase#Config.Name)
+
+The [`Name`](https://pkg.go.dev/github.com/durudex/go-polybase#Config.Name) field defines the client name used as the value of the `X-Polybase-Client` HTTP header in requests to the Polybase API.
+
+Additionally, for better analysis, the prefix `"durudex/go-polybase:"` is added to each name. This allows for easier identification of the module or library from which requests are made.
+
+### [`Config.DefaultNamespace`](https://pkg.go.dev/github.com/durudex/go-polybase#Config.DefaultNamespace)
+
+The [`DefaultNamespace`](https://pkg.go.dev/github.com/durudex/go-polybase#Config.DefaultNamespace) field defines the default namespace that will be added to the collection name when creating a new instance.
+
+### [`Config.RecoverHandler`](https://pkg.go.dev/github.com/durudex/go-polybase#Config.RecoverHandler)
+
+The [`RecoverHandler`](https://pkg.go.dev/github.com/durudex/go-polybase#Config.RecoverHandler) field defines the handler that will be called in case of a panic.
+
+Panics usually occur during development and may indicate passing an incorrect type or a lack of connection to the internet or the Polybase API.
