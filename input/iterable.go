@@ -17,9 +17,28 @@ func ParseIterable(arg any) []any {
 func parseIterableValue(v *reflect.Value) []any {
 	e := v.Type().Elem()
 
-	if e.Kind() == reflect.Interface {
+	switch e.Kind() {
+	case reflect.Interface:
 		return v.Interface().([]any)
-	} else if !AllowedKindTypes[e.Kind()] {
+	case reflect.Struct:
+		n := v.Len()
+		res := make([]any, n)
+
+		for i := 0; i < n; i++ {
+			field := v.Index(i)
+
+			pv := parseForeignValue(&field)
+			if pv == nil {
+				panic("error: unsupported nested struct")
+			}
+
+			res[i] = pv
+		}
+
+		return res
+	}
+
+	if !AllowedKindTypes[e.Kind()] {
 		panic("error: unsupported type")
 	}
 
