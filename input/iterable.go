@@ -35,7 +35,7 @@ func parseIterableValue(v *reflect.Value) []any {
 			res[i] = pv
 		}
 
-		return res
+		return []any{res}
 	}
 
 	if !AllowedKindTypes[e.Kind()] {

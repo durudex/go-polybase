@@ -39,12 +39,12 @@ var ParseIterableTests = map[string]struct {
 			{CollectionID: "1", ID: "2"}, {CollectionID: "3", ID: "4"},
 			{CollectionID: "5", ID: "6"}, {CollectionID: "7", ID: "8"},
 		},
-		want: []any{
+		want: []any{[]any{
 			input.Foreign{CollectionID: "1", ID: "2"},
 			input.Foreign{CollectionID: "3", ID: "4"},
 			input.Foreign{CollectionID: "5", ID: "6"},
 			input.Foreign{CollectionID: "7", ID: "8"},
-		},
+		}},
 	},
 }
 
