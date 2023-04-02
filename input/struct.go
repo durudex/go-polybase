@@ -25,15 +25,18 @@ func parseStructValue(v *reflect.Value) []any {
 		case reflect.Pointer:
 			pv := parsePointerValue(&field)
 			res = append(res, pv...)
+		case reflect.Map:
+			pv := parseMapValue(&field)
+			res = append(res, pv)
 		case reflect.Struct:
 			pv := parseForeignValue(&field)
 			if pv == nil {
-				panic("error: unsupported nested struct")
+				panic("error: unsupported struct type")
 			}
 
 			res = append(res, pv)
 		default:
-			if !AllowedKindTypes[field.Kind()] {
+			if !AllowedKindType[field.Kind()] {
 				panic("error: unsupported type")
 			}
 

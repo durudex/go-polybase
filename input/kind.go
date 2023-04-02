@@ -9,9 +9,18 @@ package input
 
 import "reflect"
 
-var AllowedKindTypes = map[reflect.Kind]bool{
-	reflect.String: true, reflect.Int: true, reflect.Int8: true,
-	reflect.Int16: true, reflect.Int32: true, reflect.Int64: true,
-	reflect.Uint: true, reflect.Uint8: true, reflect.Uint16: true,
-	reflect.Uint32: true, reflect.Uint64: true, reflect.Bool: true,
-}
+var (
+	AllowedKindType = [...]bool{
+		reflect.String: true, reflect.Int: true, reflect.Int8: true,
+		reflect.Int16: true, reflect.Int32: true, reflect.Int64: true,
+		reflect.Uint: true, reflect.Uint8: true, reflect.Uint16: true,
+		reflect.Uint32: true, reflect.Uint64: true, reflect.Bool: true,
+	}
+
+	AllowedMapKeyKind = [...]bool{
+		reflect.String: true, reflect.Int: true, reflect.Int8: true,
+		reflect.Int16: true, reflect.Int32: true, reflect.Int64: true,
+		reflect.Uint: true, reflect.Uint8: true, reflect.Uint16: true,
+		reflect.Uint32: true, reflect.Uint64: true,
+	}
+)

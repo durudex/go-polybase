@@ -9,12 +9,20 @@ package input
 
 import "reflect"
 
+const customForeignMethod = "Reference"
+
+var (
+	foreignStructType  = reflect.TypeOf(Foreign{})
+	foreignPointerType = reflect.TypeOf((*Foreign)(nil))
+	customForeignType  = reflect.TypeOf((*CustomForeign)(nil))
+)
+
 type Foreign struct {
 	CollectionID string `json:"collectionId"`
 	ID           string `json:"id"`
 }
 
-type ForeignDoer interface {
+type CustomForeign interface {
 	Reference() *Foreign
 }
 
@@ -26,16 +34,22 @@ func ParseForeign(arg any) any {
 func parseForeignValue(v *reflect.Value) any {
 	t := v.Type()
 
-	if t == reflect.TypeOf(Foreign{}) || t == reflect.TypeOf((*Foreign)(nil)) {
+	if t == foreignStructType || t == foreignPointerType {
 		return v.Interface()
-	}
-
-	fd := reflect.TypeOf((*ForeignDoer)(nil)).Elem()
-
-	if t.Implements(fd) {
-		v := v.MethodByName("Reference").Call([]reflect.Value{})
-		return v[0].Interface()
+	} else if isCustomForeign(t) {
+		return callForeignMethod(v).Interface()
 	}
 
 	return nil
+}
+
+func callForeignMethod(v *reflect.Value) reflect.Value {
+	res := v.MethodByName(customForeignMethod).
+		Call([]reflect.Value{})
+
+	return res[0]
+}
+
+func isCustomForeign(t reflect.Type) bool {
+	return t.Implements(customForeignType.Elem())
 }

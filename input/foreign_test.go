@@ -25,6 +25,16 @@ func (m ParseForeignMock) Reference() *input.Foreign {
 
 var ParseForeignTests = map[string]struct{ arg, want any }{
 	"Default": {
+		arg: input.Foreign{
+			CollectionID: "example/example",
+			ID:           "1",
+		},
+		want: input.Foreign{
+			CollectionID: "example/example",
+			ID:           "1",
+		},
+	},
+	"Pointer": {
 		arg: &input.Foreign{
 			CollectionID: "example/example",
 			ID:           "1",
@@ -36,6 +46,13 @@ var ParseForeignTests = map[string]struct{ arg, want any }{
 	},
 	"Custom": {
 		arg: ParseForeignMock{ID: "1"},
+		want: &input.Foreign{
+			CollectionID: "example/example",
+			ID:           "1",
+		},
+	},
+	"Custom Pointer": {
+		arg: &ParseForeignMock{ID: "1"},
 		want: &input.Foreign{
 			CollectionID: "example/example",
 			ID:           "1",

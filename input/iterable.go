@@ -38,7 +38,7 @@ func parseIterableValue(v *reflect.Value) []any {
 		return []any{res}
 	}
 
-	if !AllowedKindTypes[e.Kind()] {
+	if !AllowedKindType[e.Kind()] {
 		panic("error: unsupported type")
 	}
 

@@ -51,6 +51,20 @@ var ParseTests = map[string]struct{ args, want []any }{
 			}, "", 0, false,
 		},
 	},
+	"Map": {
+		args: []any{
+			map[int]int{1: 2, 3: 4, 5: 6},
+			map[string]input.Foreign{
+				"1": {CollectionID: "1", ID: "2"},
+			},
+		},
+		want: []any{
+			map[int]int{1: 2, 3: 4, 5: 6},
+			map[string]input.Foreign{
+				"1": {CollectionID: "1", ID: "2"},
+			},
+		},
+	},
 }
 
 func TestParse(t *testing.T) {

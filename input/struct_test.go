@@ -58,6 +58,12 @@ var ParseStructTests = map[string]struct {
 			ID:           "1",
 		}},
 	},
+	"Map": {
+		arg: struct{ M map[int]int }{
+			M: map[int]int{1: 2, 3: 4},
+		},
+		want: []any{map[int]int{1: 2, 3: 4}},
+	},
 }
 
 func TestParseStruct(t *testing.T) {

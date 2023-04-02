@@ -26,7 +26,7 @@ func parsePointerValue(v *reflect.Value) []any {
 		}
 
 		return parseStructValue(&e)
-	} else if !AllowedKindTypes[e.Kind()] {
+	} else if !AllowedKindType[e.Kind()] {
 		panic("error: unsupported type")
 	}
 

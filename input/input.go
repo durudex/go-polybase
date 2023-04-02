@@ -13,11 +13,11 @@ func Parse(args []any) []any {
 	var res []any
 
 	for _, arg := range args {
-		val := reflect.ValueOf(arg)
+		v := reflect.ValueOf(arg)
 
-		switch val.Kind() {
+		switch v.Kind() {
 		case reflect.Array, reflect.Slice:
-			pv := parseIterableValue(&val)
+			pv := parseIterableValue(&v)
 
 			if res == nil {
 				res = pv
@@ -25,14 +25,17 @@ func Parse(args []any) []any {
 			}
 
 			res = append(res, pv...)
+		case reflect.Map:
+			pv := parseMapValue(&v)
+			res = append(res, pv)
 		case reflect.Struct:
-			pf := parseForeignValue(&val)
+			pf := parseForeignValue(&v)
 			if pf != nil {
 				res = append(res, pf)
 				continue
 			}
 
-			pv := parseStructValue(&val)
+			pv := parseStructValue(&v)
 
 			if res == nil {
 				res = pv
@@ -41,7 +44,7 @@ func Parse(args []any) []any {
 
 			res = append(res, pv...)
 		case reflect.Ptr:
-			pv := parsePointerValue(&val)
+			pv := parsePointerValue(&v)
 
 			if res == nil {
 				res = pv
@@ -50,7 +53,7 @@ func Parse(args []any) []any {
 
 			res = append(res, pv...)
 		default:
-			if !AllowedKindTypes[val.Kind()] {
+			if !AllowedKindType[v.Kind()] {
 				panic("error: unsupported type")
 			}
 
