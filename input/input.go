@@ -17,7 +17,7 @@ func Parse(args []any) []any {
 
 		switch v.Kind() {
 		case reflect.Array, reflect.Slice:
-			pv := parseIterableValue(&v)
+			pv := parseArrayValue(&v)
 
 			if res == nil {
 				res = pv

@@ -44,7 +44,7 @@ var ParseStructTests = map[string]struct {
 			String:  new(string),
 			Boolean: new(bool),
 		},
-		want: []any{0, "", false},
+		want: []any{new(int), new(string), new(bool)},
 	},
 	"Foreign": {
 		arg: struct{ F input.Foreign }{

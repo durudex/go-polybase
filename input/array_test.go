@@ -14,7 +14,7 @@ import (
 	"github.com/durudex/go-polybase/input"
 )
 
-var ParseIterableTests = map[string]struct {
+var ParseArrayTests = map[string]struct {
 	arg  any
 	want []any
 }{
@@ -48,10 +48,10 @@ var ParseIterableTests = map[string]struct {
 	},
 }
 
-func TestParseIterable(t *testing.T) {
-	for name, test := range ParseIterableTests {
+func TestParseArray(t *testing.T) {
+	for name, test := range ParseArrayTests {
 		t.Run(name, func(t *testing.T) {
-			got := input.ParseIterable(test.arg)
+			got := input.ParseArray(test.arg)
 
 			if !reflect.DeepEqual(got, test.want) {
 				t.Fatal("error: want does not match")
@@ -60,11 +60,11 @@ func TestParseIterable(t *testing.T) {
 	}
 }
 
-func BenchmarkParseIterable(b *testing.B) {
-	for name, test := range ParseIterableTests {
+func BenchmarkParseArray(b *testing.B) {
+	for name, test := range ParseArrayTests {
 		b.Run(name, func(b *testing.B) {
 			for i := 0; i < b.N; i++ {
-				input.ParseIterable(test.arg)
+				input.ParseArray(test.arg)
 			}
 		})
 	}

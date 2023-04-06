@@ -48,7 +48,7 @@ var ParseTests = map[string]struct{ args, want []any }{
 			1, "durudex", true, &input.Foreign{
 				CollectionID: "example/example",
 				ID:           "1",
-			}, "", 0, false,
+			}, new(string), new(int), new(bool),
 		},
 	},
 	"Map": {

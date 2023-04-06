@@ -16,31 +16,35 @@ func ParseStruct(arg any) []any {
 
 func parseStructValue(v *reflect.Value) []any {
 	n := v.NumField()
-	res := make([]any, 0, n)
+	res := make([]any, n)
 
 	for i := 0; i < n; i++ {
 		field := v.Field(i)
 
 		switch field.Kind() {
 		case reflect.Pointer:
-			pv := parsePointerValue(&field)
-			res = append(res, pv...)
+			pv := parseSimplePointerValue(&field)
+			if pv == nil {
+				panic("error: unsupported pointer value")
+			}
+
+			res[i] = pv
 		case reflect.Map:
 			pv := parseMapValue(&field)
-			res = append(res, pv)
+			res[i] = pv
 		case reflect.Struct:
 			pv := parseForeignValue(&field)
 			if pv == nil {
 				panic("error: unsupported struct type")
 			}
 
-			res = append(res, pv)
+			res[i] = pv
 		default:
 			if !AllowedKindType[field.Kind()] {
 				panic("error: unsupported type")
 			}
 
-			res = append(res, field.Interface())
+			res[i] = field.Interface()
 		}
 	}
 

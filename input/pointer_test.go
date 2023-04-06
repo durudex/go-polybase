@@ -20,15 +20,15 @@ var ParsePointerTests = map[string]struct {
 }{
 	"String": {
 		arg:  new(string),
-		want: []any{""},
+		want: []any{new(string)},
 	},
 	"Integer": {
 		arg:  new(int),
-		want: []any{0},
+		want: []any{new(int)},
 	},
 	"Boolean": {
 		arg:  new(bool),
-		want: []any{false},
+		want: []any{new(bool)},
 	},
 	"Struct": {
 		arg: &ParseStructMock{

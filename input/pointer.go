@@ -17,18 +17,29 @@ func ParsePointer(arg any) []any {
 func parsePointerValue(v *reflect.Value) []any {
 	e := v.Elem()
 
-	if v.IsNil() {
-		panic("error: unsupported nil value")
-	} else if e.Kind() == reflect.Struct {
-		pf := parseForeignValue(v)
-		if pf != nil {
-			return []any{pf}
-		}
-
+	pv := parseSimplePointerValue(v)
+	if pv == nil {
 		return parseStructValue(&e)
-	} else if !AllowedKindType[e.Kind()] {
-		panic("error: unsupported type")
 	}
 
-	return []any{e.Interface()}
+	return []any{pv}
+}
+
+func parseSimplePointerValue(v *reflect.Value) any {
+	e := v.Elem()
+
+	if v.IsNil() {
+		panic("error: unsupported pointer nil value")
+	} else if e.Kind() == reflect.Struct {
+		pv := parseForeignValue(v)
+		if pv == nil {
+			return nil
+		}
+
+		return pv
+	} else if !AllowedKindType[e.Kind()] {
+		panic("error: unsupported pointer type")
+	}
+
+	return v.Interface()
 }

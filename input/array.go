@@ -9,12 +9,12 @@ package input
 
 import "reflect"
 
-func ParseIterable(arg any) []any {
+func ParseArray(arg any) []any {
 	val := reflect.ValueOf(arg)
-	return parseIterableValue(&val)
+	return parseArrayValue(&val)
 }
 
-func parseIterableValue(v *reflect.Value) []any {
+func parseArrayValue(v *reflect.Value) []any {
 	e := v.Type().Elem()
 
 	switch e.Kind() {
@@ -29,7 +29,7 @@ func parseIterableValue(v *reflect.Value) []any {
 
 			pv := parseForeignValue(&field)
 			if pv == nil {
-				panic("error: unsupported nested struct")
+				panic("error: unsupported struct")
 			}
 
 			res[i] = pv
