@@ -1,8 +1,8 @@
 /*
  * Copyright © 2022-2023 Durudex
  *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
+ * This source code is licensed under the MIT license found in the LICENSE
+ * file in the root directory of this source tree.
  */
 
 package polybase
@@ -16,11 +16,13 @@ import (
 )
 
 const (
-	// The ClientHeaderKey constant stores the value of the client key for an HTTP header.
+	// The ClientHeaderKey constant stores the value of the client key for
+	// an HTTP header.
 	ClientHeaderKey = "X-Polybase-Client"
 
-	// The clientHeaderPrefix constant stores the value of the client prefix for an HTTP header.
-	// This value is added to the beginning of the client name specified in the configuration.
+	// The clientHeaderPrefix constant stores the value of the client prefix
+	// for an HTTP header. This value is added to the beginning of the client
+	// name specified in the configuration.
 	//
 	// Example: "durudex/go-polybase:default-name"
 	clientHeaderPrefix = "durudex/go-polybase:"
@@ -28,8 +30,8 @@ const (
 
 // Client interface stores methods for interaction with Polybase Node.
 type Client interface {
-	// MakeRequest method makes a request with the specified settings and decodes
-	// the JSON response.
+	// MakeRequest method makes a request with the specified settings and
+	// decodes the JSON response.
 	MakeRequest(ctx context.Context, req *Request, resp any) error
 
 	Config() *Config
@@ -67,20 +69,23 @@ type client struct {
 	doer *http.Client
 }
 
-// To start using the go-polybase client, you need to crete a new client instance. This can be
-// done using the internal New() function, which returns a new instance with either a specified
-// configuration or the default configuration.
+// To start using the go-polybase client, you need to crete a new client
+// instance. This can be done using the internal New() function, which
+// returns a new instance with either a specified configuration or the
+// default configuration.
 //
-// To create an instance with a specified configuration, you need to pass a pointer of Config
-// value as an argument to the New(...) function. This can be useful if you want to use specific
-// settings, for example, if you have your own configuration file.
+// To create an instance with a specified configuration, you need to pass
+// a pointer of Config value as an argument to the New(...) function. This
+// can be useful if you want to use specific settings, for example, if you
+// have your own configuration file.
 //
 //	client := polybase.New(&polybase.Config{
 //		...
 //	}
 //
-// If you want to use the default configuration, you can simply call the New() function without any
-// arguments. The client will be created with the default configuration set in the go-polybase module.
+// If you want to use the default configuration, you can simply call the New()
+// function without any arguments. The client will be created with the default
+// configuration set in the go-polybase module.
 //
 //	client := polybase.New()
 func New(configs ...*Config) Client {
@@ -97,7 +102,8 @@ func New(configs ...*Config) Client {
 	return &client{cfg: cfg, doer: http.DefaultClient}
 }
 
-// MakeRequest method makes a request with the specified settings and decodes the JSON response.
+// MakeRequest method makes a request with the specified settings and decodes
+// the JSON response.
 func (c *client) MakeRequest(ctx context.Context, req *Request, resp any) error {
 	// Creating a new HTTP request.
 	rwc, err := c.newRequest(ctx, req)

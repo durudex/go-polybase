@@ -1,8 +1,8 @@
 /*
  * Copyright © 2022-2023 Durudex
  *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
+ * This source code is licensed under the MIT license found in the LICENSE
+ * file in the root directory of this source tree.
  */
 
 package polybase
@@ -30,14 +30,15 @@ type Record[T any] struct {
 	Data T `json:"data"`
 }
 
-// RecordDoer interface stores methods for interacting with the specified Polybase record.
+// RecordDoer interface stores methods for interacting with the specified
+// Polybase record.
 type RecordDoer[T any] interface {
-	// Get method sends a request to getting collection record by the specified ID and decodes
-	// the returned value.
+	// Get method sends a request to getting collection record by the
+	// specified ID and decodes the returned value.
 	Get(ctx context.Context) *SingleResponse[T]
 
-	// Call method calls a function from the Polybase collection scheme with the specified
-	// arguments.
+	// Call method calls a function from the Polybase collection scheme
+	// with the specified arguments.
 	Call(ctx context.Context, fc string, args ...any) *SingleResponse[T]
 }
 
@@ -60,8 +61,8 @@ func newRecordDoer[T any](client Client, name, id string) RecordDoer[T] {
 	}
 }
 
-// Get method sends a request to getting collection record by the specified ID and decodes
-// the returned value.
+// Get method sends a request to getting collection record by the specified
+// ID and decodes the returned value.
 func (r *recordDoer[T]) Get(ctx context.Context) *SingleResponse[T] {
 	defer recoverFunc(ctx, r.client.Config().RecoverHandler)
 
@@ -79,7 +80,8 @@ func (r *recordDoer[T]) Get(ctx context.Context) *SingleResponse[T] {
 	return &resp
 }
 
-// Call method calls a function from the Polybase collection scheme with the specified arguments.
+// Call method calls a function from the Polybase collection scheme with
+// the specified arguments.
 func (r *recordDoer[T]) Call(ctx context.Context, fc string, args ...any) *SingleResponse[T] {
 	defer recoverFunc(ctx, r.client.Config().RecoverHandler)
 
