@@ -12,6 +12,13 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+
+	"github.com/durudex/go-polybase/input"
+)
+
+const (
+	recordsEndpointFormat = "/collections/%s/records"
+	recordEndpointFormat  = recordsEndpointFormat + "/%s"
 )
 
 // Record structure stores the Polybase record.
@@ -38,11 +45,19 @@ type RecordDoer[T any] interface {
 type recordDoer[T any] struct {
 	client   Client
 	endpoint string
+	config   *input.Foreign
 }
 
 // newRecordDoer function returns a new record doer.
-func newRecordDoer[T any](client Client, endpoint string) RecordDoer[T] {
-	return &recordDoer[T]{client: client, endpoint: endpoint}
+func newRecordDoer[T any](client Client, name, id string) RecordDoer[T] {
+	endpoint := fmt.Sprintf(recordEndpointFormat, name, url.QueryEscape(id))
+	config := &input.Foreign{CollectionID: name, ID: id}
+
+	return &recordDoer[T]{
+		client:   client,
+		endpoint: endpoint,
+		config:   config,
+	}
 }
 
 // Get method sends a request to getting collection record by the specified ID and decodes
@@ -58,7 +73,7 @@ func (r *recordDoer[T]) Get(ctx context.Context) *SingleResponse[T] {
 	var resp SingleResponse[T]
 
 	if err := r.client.MakeRequest(ctx, req, &resp); err != nil {
-		panic("error getting record: " + err.Error())
+		panic("error: getting record: " + err.Error())
 	}
 
 	return &resp
@@ -71,14 +86,16 @@ func (r *recordDoer[T]) Call(ctx context.Context, fc string, args ...any) *Singl
 	req := &Request{
 		Endpoint: r.endpoint + fmt.Sprintf("/call/%s", url.QueryEscape(fc)),
 		Method:   http.MethodPost,
-		Body:     Body{Args: ParseInput(args)},
+		Body:     Body{Args: input.Parse(args)},
 	}
 
 	var resp SingleResponse[T]
 
 	if err := r.client.MakeRequest(ctx, req, &resp); err != nil {
-		panic("error call collection function: " + err.Error())
+		panic("error: call collection function: " + err.Error())
 	}
 
 	return &resp
 }
+
+func (r *recordDoer[T]) Reference() *input.Foreign { return r.config }

@@ -12,6 +12,8 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+
+	"github.com/durudex/go-polybase/input"
 )
 
 type Collection[T any] interface {
@@ -38,14 +40,14 @@ func (c *collection[T]) Get(ctx context.Context) *Response[T] {
 	defer recoverFunc(ctx, c.client.Config().RecoverHandler)
 
 	req := &Request{
-		Endpoint: fmt.Sprintf("/collections/%s/records", c.name),
+		Endpoint: fmt.Sprintf(recordsEndpointFormat, c.name),
 		Method:   http.MethodGet,
 	}
 
 	var resp Response[T]
 
 	if err := c.client.MakeRequest(ctx, req, &resp); err != nil {
-		panic("error getting collection records: " + err.Error())
+		panic("error: getting collection records: " + err.Error())
 	}
 
 	return &resp
@@ -53,47 +55,46 @@ func (c *collection[T]) Get(ctx context.Context) *Response[T] {
 
 func (c *collection[T]) Before(cursor string) Query[T] {
 	return newQuery[T](c.client,
-		fmt.Sprintf("/collections/%s/records", c.name)).Before(cursor)
+		fmt.Sprintf(recordsEndpointFormat, c.name)).Before(cursor)
 }
 
 func (c *collection[T]) After(cursor string) Query[T] {
 	return newQuery[T](c.client,
-		fmt.Sprintf("/collections/%s/records", c.name)).After(cursor)
+		fmt.Sprintf(recordsEndpointFormat, c.name)).After(cursor)
 }
 
 func (c *collection[T]) Limit(num int) Query[T] {
 	return newQuery[T](c.client,
-		fmt.Sprintf("/collections/%s/records", c.name)).Limit(num)
+		fmt.Sprintf(recordsEndpointFormat, c.name)).Limit(num)
 }
 
 func (c *collection[T]) Sort(field string, direction ...string) Query[T] {
 	return newQuery[T](c.client,
-		fmt.Sprintf("/collections/%s/records", c.name)).Sort(field, direction...)
+		fmt.Sprintf(recordsEndpointFormat, c.name)).Sort(field, direction...)
 }
 
 func (c *collection[T]) Where(field string, op WhereOperator, value any) Query[T] {
 	return newQuery[T](c.client,
-		fmt.Sprintf("/collections/%s/records", c.name)).Where(field, op, value)
+		fmt.Sprintf(recordsEndpointFormat, c.name)).Where(field, op, value)
 }
 
 func (c *collection[T]) Record(id string) RecordDoer[T] {
-	return newRecordDoer[T](c.client,
-		fmt.Sprintf("/collections/%s/records/%s", c.name, url.QueryEscape(id)))
+	return newRecordDoer[T](c.client, c.name, id)
 }
 
 func (c *collection[T]) Create(ctx context.Context, args ...any) *SingleResponse[T] {
 	defer recoverFunc(ctx, c.client.Config().RecoverHandler)
 
 	req := &Request{
-		Endpoint: fmt.Sprintf("/collections/%s/records", c.name),
+		Endpoint: fmt.Sprintf(recordsEndpointFormat, c.name),
 		Method:   http.MethodPost,
-		Body:     Body{Args: ParseInput(args)},
+		Body:     Body{Args: input.Parse(args)},
 	}
 
 	var resp SingleResponse[T]
 
 	if err := c.client.MakeRequest(ctx, req, &resp); err != nil {
-		panic("error creating a new record: " + err.Error())
+		panic("error: creating a new record instance: " + err.Error())
 	}
 
 	return &resp
