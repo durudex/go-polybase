@@ -87,7 +87,7 @@ collection Example {
         age number,
         alive boolean,
         tags string[],
-        balance: map<string, number>
+        balance: map<string, number>,
     ) { ... }
 }
 ```

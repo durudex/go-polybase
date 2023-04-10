@@ -21,6 +21,18 @@ collection Example {
 
 So, you need to pass the following arguments: `id`, `name`, `age`. This can be done in several ways.
 
+### Variable
+
+```go
+var (
+    id = "1"
+    name = "example"
+    age = 146
+)
+
+coll.Create(..., args: id, name, status)
+```
+
 ### Structure
 
 ```go
@@ -74,7 +86,7 @@ collection Example {
         age number,
         alive boolean,
         tags string[],
-        balance: map<string, number>
+        balance: map<string, number>,
     ) { ... }
 }
 ```
