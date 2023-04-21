@@ -19,8 +19,8 @@ import (
 type Collection[T any] interface {
 	Query[T]
 
-	Record(id string) RecordDoer[T]
-	Create(ctx context.Context, args ...any) *SingleResponse[T]
+	Record(id string) Record[T]
+	Create(ctx context.Context, args ...any) *Response[T]
 }
 
 type collection[T any] struct {
@@ -36,7 +36,7 @@ func NewCollection[T any](client Client, name string) Collection[T] {
 	return &collection[T]{name: url.QueryEscape(name), client: client}
 }
 
-func (c *collection[T]) Get(ctx context.Context) *Response[T] {
+func (c *collection[T]) Get(ctx context.Context) *ResponseList[T] {
 	defer recoverFunc(ctx, c.client.Config().RecoverHandler)
 
 	req := &Request{
@@ -44,7 +44,7 @@ func (c *collection[T]) Get(ctx context.Context) *Response[T] {
 		Method:   http.MethodGet,
 	}
 
-	var resp Response[T]
+	var resp ResponseList[T]
 
 	if err := c.client.MakeRequest(ctx, req, &resp); err != nil {
 		panic("error: getting collection records: " + err.Error())
@@ -78,11 +78,11 @@ func (c *collection[T]) Where(field string, op WhereOperator, value any) Query[T
 		fmt.Sprintf(recordsEndpointFormat, c.name)).Where(field, op, value)
 }
 
-func (c *collection[T]) Record(id string) RecordDoer[T] {
-	return newRecordDoer[T](c.client, c.name, id)
+func (c *collection[T]) Record(id string) Record[T] {
+	return newRecord[T](c.client, c.name, id)
 }
 
-func (c *collection[T]) Create(ctx context.Context, args ...any) *SingleResponse[T] {
+func (c *collection[T]) Create(ctx context.Context, args ...any) *Response[T] {
 	defer recoverFunc(ctx, c.client.Config().RecoverHandler)
 
 	req := &Request{
@@ -91,7 +91,7 @@ func (c *collection[T]) Create(ctx context.Context, args ...any) *SingleResponse
 		Body:     Body{Args: input.Parse(args)},
 	}
 
-	var resp SingleResponse[T]
+	var resp Response[T]
 
 	if err := c.client.MakeRequest(ctx, req, &resp); err != nil {
 		panic("error: creating a new record instance: " + err.Error())

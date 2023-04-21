@@ -49,18 +49,23 @@ type Body struct {
 	Args []any `json:"args"`
 }
 
-// Response structure stores data when returned from multiple responses.
-type Response[T any] struct {
-	Data   []Record[T] `json:"data,omitempty"`
-	Cursor Cursor      `json:"cursor,omitempty"`
-	Error  Error       `json:"error,omitempty"`
+// RecordResponse structure stores the Polybase record response.
+type RecordResponse[T any] struct {
+	Block Block `json:"block"`
+	Data  T     `json:"data"`
 }
 
-// SingleResponse structure stores data when returned from single response.
-type SingleResponse[T any] struct {
-	Block Block `json:"block,omitempty"`
-	Data  T     `json:"data,omitempty"`
+// Response structure stores data when returned from single response.
+type Response[T any] struct {
+	RecordResponse[T]
 	Error Error `json:"error,omitempty"`
+}
+
+// ResponseList structure stores data when returned from multiple responses.
+type ResponseList[T any] struct {
+	Data   []RecordResponse[T] `json:"data,omitempty"`
+	Cursor Cursor              `json:"cursor,omitempty"`
+	Error  Error               `json:"error,omitempty"`
 }
 
 // client structure implements all methods of the Client interface.

@@ -27,7 +27,7 @@ const (
 )
 
 type Query[T any] interface {
-	Get(ctx context.Context) *Response[T]
+	Get(ctx context.Context) *ResponseList[T]
 	Before(cursor string) Query[T]
 	After(cursor string) Query[T]
 	Limit(num int) Query[T]
@@ -45,7 +45,7 @@ func newQuery[T any](client Client, endpoint string) Query[T] {
 	return &query[T]{client: client, endpoint: endpoint, param: make(map[string]any)}
 }
 
-func (q *query[T]) Get(ctx context.Context) *Response[T] {
+func (q *query[T]) Get(ctx context.Context) *ResponseList[T] {
 	defer recoverFunc(ctx, q.client.Config().RecoverHandler)
 
 	req := &Request{
@@ -53,7 +53,7 @@ func (q *query[T]) Get(ctx context.Context) *Response[T] {
 		Method:   http.MethodGet,
 	}
 
-	var resp Response[T]
+	var resp ResponseList[T]
 
 	if err := q.client.MakeRequest(ctx, req, &resp); err != nil {
 		panic("error getting collection records: " + err.Error())

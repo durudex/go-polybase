@@ -21,40 +21,31 @@ const (
 	recordEndpointFormat  = recordsEndpointFormat + "/%s"
 )
 
-// Record structure stores the Polybase record.
-type Record[T any] struct {
-	// Block field stores block data from the blockchain.
-	Block Block `json:"block"`
-
-	// Data field stores data with the specified type.
-	Data T `json:"data"`
-}
-
 // RecordDoer interface stores methods for interacting with the specified
 // Polybase record.
-type RecordDoer[T any] interface {
+type Record[T any] interface {
 	// Get method sends a request to getting collection record by the
 	// specified ID and decodes the returned value.
-	Get(ctx context.Context) *SingleResponse[T]
+	Get(ctx context.Context) *Response[T]
 
 	// Call method calls a function from the Polybase collection scheme
 	// with the specified arguments.
-	Call(ctx context.Context, fc string, args ...any) *SingleResponse[T]
+	Call(ctx context.Context, fc string, args ...any) *Response[T]
 }
 
-// recordDoer structure implements all methods of the RecordDoer interface.
-type recordDoer[T any] struct {
+// record structure implements all methods of the Record interface.
+type record[T any] struct {
 	client   Client
 	endpoint string
 	config   *input.Foreign
 }
 
 // newRecordDoer function returns a new record doer.
-func newRecordDoer[T any](client Client, name, id string) RecordDoer[T] {
+func newRecord[T any](client Client, name, id string) Record[T] {
 	endpoint := fmt.Sprintf(recordEndpointFormat, name, url.QueryEscape(id))
 	config := &input.Foreign{CollectionID: name, ID: id}
 
-	return &recordDoer[T]{
+	return &record[T]{
 		client:   client,
 		endpoint: endpoint,
 		config:   config,
@@ -63,7 +54,7 @@ func newRecordDoer[T any](client Client, name, id string) RecordDoer[T] {
 
 // Get method sends a request to getting collection record by the specified
 // ID and decodes the returned value.
-func (r *recordDoer[T]) Get(ctx context.Context) *SingleResponse[T] {
+func (r *record[T]) Get(ctx context.Context) *Response[T] {
 	defer recoverFunc(ctx, r.client.Config().RecoverHandler)
 
 	req := &Request{
@@ -71,7 +62,7 @@ func (r *recordDoer[T]) Get(ctx context.Context) *SingleResponse[T] {
 		Method:   http.MethodGet,
 	}
 
-	var resp SingleResponse[T]
+	var resp Response[T]
 
 	if err := r.client.MakeRequest(ctx, req, &resp); err != nil {
 		panic("error: getting record: " + err.Error())
@@ -82,7 +73,7 @@ func (r *recordDoer[T]) Get(ctx context.Context) *SingleResponse[T] {
 
 // Call method calls a function from the Polybase collection scheme with
 // the specified arguments.
-func (r *recordDoer[T]) Call(ctx context.Context, fc string, args ...any) *SingleResponse[T] {
+func (r *record[T]) Call(ctx context.Context, fc string, args ...any) *Response[T] {
 	defer recoverFunc(ctx, r.client.Config().RecoverHandler)
 
 	req := &Request{
@@ -91,7 +82,7 @@ func (r *recordDoer[T]) Call(ctx context.Context, fc string, args ...any) *Singl
 		Body:     Body{Args: input.Parse(args)},
 	}
 
-	var resp SingleResponse[T]
+	var resp Response[T]
 
 	if err := r.client.MakeRequest(ctx, req, &resp); err != nil {
 		panic("error: call collection function: " + err.Error())
@@ -100,4 +91,4 @@ func (r *recordDoer[T]) Call(ctx context.Context, fc string, args ...any) *Singl
 	return &resp
 }
 
-func (r *recordDoer[T]) Reference() *input.Foreign { return r.config }
+func (r *record[T]) Reference() *input.Foreign { return r.config }

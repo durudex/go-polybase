@@ -1,5 +1,12 @@
 # Change Log
 
+## [Unreleased]
+
+### Changed
+
+- Rename `Response` to `ResponseList` and `SingleResponse` to `Response`.
+- Rename `Record` to `RecordResponse` and `RecordDoer` to `Record`.
+
 ## [0.0.3] - 2023-04-10
 
 ### Added
