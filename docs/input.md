@@ -65,7 +65,8 @@ input := []any{"1", "example", 146}
 coll.Create(..., args: input)
 ```
 
-Please note that the array or slice must be of type `any`, otherwise this array or slice will be used as a single argument.
+> **Note**
+> Array or slice must be of type `any`, otherwise this array or slice will be used as a single argument.
 
 ## Example
 
