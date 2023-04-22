@@ -1,10 +1,10 @@
-# `go-polybase`
+# `durudex/go-polybase`
 
-Implementation of the Polybase database client on Go.
+Implementation of a client for the Polybase decentralized database in Go programming language.
 
 ## Setup
 
-To get the [`go-polybase`](https://github.com/durudex/go-polybase) module, you need to have or install Go version >= [1.18](https://go.dev/dl/). To check your current version of Go, use the `go version` command.
+To get the [`go-polybase`](https://github.com/durudex/go-polybase) module, you need to have or install [Go version >= 1.19](https://go.dev/dl/). To check your current version of Go, use the `go version` command.
 
 **The command to get the module:**
 
@@ -12,9 +12,9 @@ To get the [`go-polybase`](https://github.com/durudex/go-polybase) module, you n
 go get github.com/durudex/go-polybase@latest
 ```
 
-## Basic Example
+## Example
 
-An example in which a new instance of the client is created and the values of the collection are obtained.
+An example where a new instance of a client, collection, record is created, and the result of the record creation is obtained.
 
 ```go
 import (
@@ -23,25 +23,28 @@ import (
     "github.com/durudex/go-polybase"
 )
 
+// Describe the model of the collection you want to get.
 type Model struct { ... }
 
 func main() {
+    // Create an instance of the client with the specified configuration.
     client := polybase.New(&polybase.Config{
         URL: polybase.TestnetURL,
     })
+    // Create an instance of the collection.
     coll := polybase.NewCollection[Model](client, "Collection")
 
-    response := coll.Record("id").Get(context.Background())
+    // Create an instance of the record with the specified ID.
+    record := coll.Record("id")
+    // Get this record from the collection.
+    response := record.Get(context.Background())
 
     ...
 }
 ```
 
-> More usage examples can be found in the [examples directory](https://github.com/durudex/go-polybase/blob/main/examples/README.md).
-
-## PolyGen
-
-For easy and fast development, you can generate code to interact with Polybase collections using [PolyGen](https://github.com/durudex/polygen).
+> **Note**
+> More examples can be found in the [examples directory](https://github.com/durudex/go-polybase/blob/main/examples/README.md).
 
 ## License
 
